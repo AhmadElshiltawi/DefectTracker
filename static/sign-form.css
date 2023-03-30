@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Allerta&display=swap');
+
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    font-family: "Allerta", sans-serif;
+  }
+
+  .signupForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .inputContainer {
+    position: relative;
+    height: 45px;
+    width: 90%;
+    margin-bottom: 17px;
+  }
+
+  .form {
+    background-color: #1c1b1b;
+    width: 400px;
+    border-radius: 16px;
+    padding: 20px 40px;
+    box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
+  }
+  
+  .title {
+    font-size: 50px;
+    margin-bottom: 50px;
+    color: #ffffff;
+  }
+
+  .input {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    border: 2px solid #ffffff;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 0 20px;
+    outline: none;
+    background: none;
+    z-index: 1;
+    font-family: inherit;
+    color: #ffffff;
+  }
+
+  .input::placeholder {
+    color:#ffffff;
+  }
+
+  .submitBtn {
+    display: block;
+    margin-left: auto;
+    padding: 15px 30px;
+    border: none;
+    background-color: #576CBC;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 30px;
+    font-family: inherit;
+  }
+  
+  .submitBtn:hover {
+    background-color: #6076cc;
+  }
+
+  .input:focus + .label {
+    color:transparent;
+  }
+
+  .input:focus {
+    border: 2px solid #576CBC;
+  }
+
+  .errorMessage {
+    font-family: inherit;
+    color: #EA5455;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .input:not(:placeholder-shown)+ .label {
+    color: transparent
+  }

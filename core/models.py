@@ -43,7 +43,7 @@ class Team(models.Model):
 
 class Collaborator(models.Model):
     user = models.ForeignKey(current_user, on_delete=models.CASCADE)
-    team_number = models.ForeignKey(Team, to_field='team_number', on_delete=models.CASCADE)
+    team_number = models.ForeignKey(Team, to_field='team_number', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.user.username
@@ -132,7 +132,7 @@ class Complete(models.Model):
         unique_together = (("collaborator_id", "ticket_number"),)
 
 
-class Assigns(models.Model):
+class Assign (models.Model):
     team_number = models.ForeignKey(Team, to_field='team_number', on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, to_field='id', on_delete=models.CASCADE)
     admin_id = models.ForeignKey(Admin, to_field='id', on_delete=models.CASCADE)
