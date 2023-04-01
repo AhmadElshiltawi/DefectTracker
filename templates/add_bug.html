@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Bug</title>
+</head>
+<body>
+<div style="text-align:center;">
+  <h1>Add Bug</h1>
+    <br/><br/>
+    {% if submitted %}
+        Bug has been added!
+    {% else %}
+
+        <form action = "" method = "POST">
+            {% csrf_token %}
+            {{ form.as_p}}
+            <input type = "submit" value = "Add">
+        </form>
+    {% endif %}
+</div>
+</body>
+</html>

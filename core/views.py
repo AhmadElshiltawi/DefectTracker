@@ -1,11 +1,13 @@
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from . import models
 from . import backend
+from .Forms import BugForm
 
 
 # Create your views here.
@@ -84,3 +86,18 @@ def signup(request):
 
     else:
         return render(request, 'sign-up.html')
+
+
+def add_bug(request):
+    submitted = False
+
+    if request.method == "POST":
+        form = BugForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/add_bug?submitted=True')
+    else:
+        form = BugForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'add_bug.html', {'form': form, 'submitted':submitted})
