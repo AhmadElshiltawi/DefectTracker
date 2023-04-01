@@ -8,4 +8,4 @@ from .models import Bug
 class BugForm(ModelForm):
     class Meta:
         model  = Bug
-        fields = ('date', 'title', 'description', 'project_id')
+        fields = ('date', 'title', 'description', 'project_id', 'user')
