@@ -18,6 +18,7 @@ def index(request):
 def signup(request):
     if request.user.is_authenticated:
         return redirect('index')
+    
     if request.method == "POST":
         email_address = request.POST['email']
         username = request.POST['username']
@@ -87,17 +88,44 @@ def signup(request):
     else:
         return render(request, 'sign-up.html')
 
+def signin(request):
+        return render(request, 'sign-in.html')
 
-def add_bug(request):
-    submitted = False
+def assign_leader(request):
+        return render(request, 'assign-leader.html')
 
-    if request.method == "POST":
-        form = BugForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/add_bug?submitted=True')
-    else:
-        form = BugForm
-        if 'submitted' in request.GET:
-            submitted = True
-    return render(request, 'add_bug.html', {'form': form, 'submitted':submitted})
+def assign_user(request):
+        return render(request, 'assign-user.html')
+
+def assign_team(request):
+        return render(request, 'assign-team.html')
+
+def bugs(request):
+        return render(request, 'bugs.html')
+
+def features(request):
+        return render(request, 'features.html')
+
+def create_bug(request):
+        return render(request, 'create-bug.html')
+
+def create_feature(request):
+        return render(request, 'create-feature.html')
+
+def create_project(request):
+        return render(request, 'create-project.html')
+
+def create_report(request):
+        return render(request, 'create-report.html')
+
+def tickets(request):
+        return render(request, 'tickets.html')
+
+def reports(request):
+        return render(request, 'reports.html')
+
+def projects(request):
+        return render(request, 'projects.html')
+
+def teams(request):
+        return render(request, 'teams.html')
