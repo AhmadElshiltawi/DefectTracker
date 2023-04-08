@@ -61,7 +61,7 @@ def add_featureRequest(date, title, description, project_id, user_id):
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
         id = random.randint(0,999999999)
-        data = cursor.execute("SELECT * FROM project WHERE project_id = ?", (id,))
+        data = cursor.execute("SELECT * FROM feature WHERE feature_id = ?", (id,))
         while True:
             if len(cursor.fetchall()) == 0:
                 break
