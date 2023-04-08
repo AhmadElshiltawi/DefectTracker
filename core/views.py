@@ -115,7 +115,7 @@ def create_bug(request):
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_bug('10', date, title, description, project, 'b')
+        database.add_bug(date, title, description, project, 'b')
     return render(request, 'create-bug.html')
 
 def create_feature(request):
@@ -124,11 +124,17 @@ def create_feature(request):
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_featureRequest('10', date, title, description, project, 'b')
+        database.add_featureRequest(date, title, description, project, 'b')
     return render(request, 'create-feature.html')
 
 def create_project(request):
-        return render(request, 'create-project.html')
+    if request.method == "POST":
+        title = request.POST['title']
+        description = request.POST['description']
+        status = "Incomplete"
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.create_project(date, status, description, 'b')
+    return render(request, 'create-project.html')
 
 def create_report(request):
         return render(request, 'create-report.html')
