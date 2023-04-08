@@ -30,17 +30,14 @@ def add_bug(date, title, description, project_id, user_id):
          sqliteConnection = sqlite3.connect('db.sqlite3')
          cursor = sqliteConnection.cursor()
          print("Successfully Connected to SQLite")
-         id = random.getrandbits(15)
+         id = random.randint(0,999999999)
          data = cursor.execute("SELECT * FROM bug WHERE bug_id = ?", (id,))
-         #while True:
-         print(data.rowcount)
-         print(cursor.rowcount)
-         if data.rowcount == 0:
-            print("reached")
-            # break
-     #     else:
-         #         id = random.getrandbits(10)
-         #         data = cursor.execute("SELECT * FROM bug WHERE bug_id = ?", (id,))
+         while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0,999999999)
+                data = cursor.execute("SELECT * FROM bug WHERE bug_id = ?", (id,))
          sqlite_insert_query = """INSERT INTO bug
                                      (bug_id, bug_date, bug_title, bug_description, project_id, user_id) 
                                      VALUES 
@@ -63,8 +60,14 @@ def add_featureRequest(date, title, description, project_id, user_id):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        id = random.getrandbits(15)
-        # need to check that the ID hasnt been used yet still
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM project WHERE project_id = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0, 999999999)
+                data = cursor.execute("SELECT * FROM feature WHERE feature_id = ?", (id,))
         sqlite_insert_query = """INSERT INTO feature
                                     (feature_id, feature_date, feature_title, feature_description, project_id, user_id) 
                                     VALUES 
@@ -87,8 +90,14 @@ def create_project(start_date, status, description, admin_id):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        id = random.getrandbits(15)
-        # need to check that the ID hasnt been used yet still
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM project WHERE project_id = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0, 999999999)
+                data = cursor.execute("SELECT * FROM project WHERE project_id = ?", (id,))
         sqlite_insert_query = """INSERT INTO project
                                     (project_id, start_date, status, description, admin_id) 
                                     VALUES 
