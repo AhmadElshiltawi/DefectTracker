@@ -129,7 +129,6 @@ def create_feature(request):
 
 def create_project(request):
     if request.method == "POST":
-        title = request.POST['title']
         description = request.POST['description']
         status = "Incomplete"
         date = timezone.now().strftime("%Y-%m-%d")
@@ -137,7 +136,12 @@ def create_project(request):
     return render(request, 'create-project.html')
 
 def create_report(request):
-        return render(request, 'create-report.html')
+    if request.method == "POST":
+        ticket = request.POST['ticket-select']
+        contents = request.POST['contents']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.create_report(ticket, contents, date)
+    return render(request, 'create-report.html')
 
 def tickets(request):
         return render(request, 'tickets.html')
