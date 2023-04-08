@@ -111,11 +111,21 @@ def features(request):
 
 def create_bug(request):
     if request.method == "POST":
-         database.add_bug('12', '12', '12', '12', 'a', 'a')
+        project = request.POST['project-select']
+        title = request.POST['title']
+        description = request.POST['description']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.add_bug('10', date, title, description, project, 'b')
     return render(request, 'create-bug.html')
 
 def create_feature(request):
-        return render(request, 'create-feature.html')
+    if request.method == "POST":
+        project = request.POST['project-select']
+        title = request.POST['title']
+        description = request.POST['description']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.add_featureRequest('10', date, title, description, project, 'b')
+    return render(request, 'create-feature.html')
 
 def create_project(request):
         return render(request, 'create-project.html')
