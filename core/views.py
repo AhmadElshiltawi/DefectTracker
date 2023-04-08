@@ -110,7 +110,9 @@ def features(request):
         return render(request, 'features.html')
 
 def create_bug(request):
-        return render(request, 'create-bug.html')
+    if request.method == "POST":
+         database.add_bug('12', '12', '12', '12', 'a', 'a')
+    return render(request, 'create-bug.html')
 
 def create_feature(request):
         return render(request, 'create-feature.html')
