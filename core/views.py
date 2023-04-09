@@ -7,17 +7,21 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from . import models
 from . import backend
-from .Forms import BugForm
-
+from . import database
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return redirect('bugs')
 
 
 def signup(request):
-    if request.user.is_authenticated:
-        return redirect('index')
+    # if request.method == "POST":
+    #     database.insert_user('a', 'a', 'a', 'a', 'a')
+
+    # return render(request, 'sign-up.html')
+    # if request.user.is_authenticated:
+    #     return redirect('index')
+    
     if request.method == "POST":
         email_address = request.POST['email']
         username = request.POST['username']
@@ -61,43 +65,109 @@ def signup(request):
             return redirect('signup')
 
         # Check if email exists
-        if User.objects.filter(email=email_address).exists():
+        if database.checkdata(email_address,"user", "email"):
             messages.info(request, 'Email is already taken!')
             return redirect('signup')
 
         # Check if the username exists
-        elif User.objects.filter(username=username).exists():
+        elif database.checkdata(username,"user", "username"):
             messages.info(request, 'Username is already taken!')
             return redirect('signup')
 
-        # At this point, all the user data should be valid!
+    #     # At this point, all the user data should be valid!
 
-        new_user = User.objects.create_user(username=username, email=email_address, password=password,
-                                            first_name=first_name, last_name=last_name)
-        new_user.save()
+    #     new_user = User.objects.create_user(username=username, email=email_address, password=password,
+    #                                         first_name=first_name, last_name=last_name)
+    #     new_user.save()
 
-        auth.authenticate(username=username, password=password)
+    #     auth.authenticate(username=username, password=password)
 
-        new_collab = models.Collaborator(user=new_user)
-        new_collab.save()
+    #     new_collab = models.Collaborator(user=new_user)
+    #     new_collab.save()
 
-        # Change this to signin once implemented
+    #     # Change this to signin once implemented
+    #     return redirect('index')
+        database.insert_user(first_name, last_name, username, password, email_address)
+
         return redirect('index')
 
     else:
         return render(request, 'sign-up.html')
 
-
-def add_bug(request):
-    submitted = False
-
+def signin(request):
     if request.method == "POST":
-        form = BugForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/add_bug?submitted=True')
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if database.checkuser(username, password):
+            return redirect('index')
+        else:
+            return render(request, 'sign-in.html')
     else:
-        form = BugForm
-        if 'submitted' in request.GET:
-            submitted = True
-    return render(request, 'add_bug.html', {'form': form, 'submitted':submitted})
+        return render(request, 'sign-in.html')
+    
+
+def assign_leader(request):
+        return render(request, 'assign-leader.html')
+
+def assign_user(request):
+        return render(request, 'assign-user.html')
+
+def assign_team(request):
+        return render(request, 'assign-team.html')
+
+def bugs(request):
+        return render(request, 'bugs.html')
+
+def features(request):
+        return render(request, 'features.html')
+
+def create_bug(request):
+    if request.method == "POST":
+        project = request.POST['project-select']
+        title = request.POST['title']
+        description = request.POST['description']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.add_bug(date, title, description, project, 'b')
+        return redirect('index')
+    return render(request, 'create-bug.html')
+
+def create_feature(request):
+    if request.method == "POST":
+        project = request.POST['project-select']
+        title = request.POST['title']
+        description = request.POST['description']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.add_featureRequest(date, title, description, project, 'b')
+        return redirect('index')
+    return render(request, 'create-feature.html')
+
+def create_project(request):
+    if request.method == "POST":
+        description = request.POST['description']
+        status = "Incomplete"
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.create_project(date, status, description, 'b')
+        return redirect('index')
+    return render(request, 'create-project.html')
+
+def create_report(request):
+    if request.method == "POST":
+        ticket = request.POST['ticket-select']
+        contents = request.POST['contents']
+        date = timezone.now().strftime("%Y-%m-%d")
+        database.create_report(ticket, contents, date)
+        return redirect('index')
+    return render(request, 'create-report.html')
+
+def tickets(request):
+        return render(request, 'tickets.html')
+
+def reports(request):
+        return render(request, 'reports.html')
+
+def projects(request):
+        return render(request, 'projects.html')
+
+def teams(request):
+        return render(request, 'teams.html')

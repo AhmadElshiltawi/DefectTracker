@@ -6,14 +6,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>DefectTracker Sign in</title>
+    <title>Create project</title>
     <link rel="stylesheet" href="{% static 'sign-form.css' %}" />
   </head>
   <body>
     <div class="signupForm">
       <form action="" method="POST" class="form">
         {% csrf_token %}
-        <h1 class="title">DefectTracker<br />Sign in</h1>
+        <h1 class="title">Create project</h1>
 
         <div class="errorMessage">
           {% for message in messages %} {{ message }} {% endfor %}
@@ -22,28 +22,27 @@
         <div class="inputContainer">
           <label>
             <input
-              name="username"
+              name="title"
               type="text"
               class="input"
-              placeholder="Username"
+              placeholder="Project name"
             />
           </label>
         </div>
 
-        <div class="inputContainer">
+        <div class="inputContainerTextArea">
           <label>
-            <input
-              name="password"
-              type="password"
-              class="input"
-              placeholder="Password"
-            />
+            <textarea
+              name = "description"
+              class="textarea-input"
+              rows="5"
+              cols="100"
+              placeholder="Project description"
+            ></textarea>
           </label>
         </div>
 
-        <input type="submit" class="submitBtn" value="Sign in" />
-        <br />
-        <a href="#"> Don't have an account? Create one here</a>
+        <input type="submit" class="submitBtn" value="Create project" />
       </form>
     </div>
   </body>

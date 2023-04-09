@@ -1,5 +1,14 @@
 import re
 
+from django.db import connection
+
+def my_custom_sql(self):
+    with connection.cursor() as cursor:
+        cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+        cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+        row = cursor.fetchone()
+
+    return row
 
 def validate_username(username):
     regex = re.compile(r'^[\w](?!.*?\.{2})[\w.]{1,28}[\w]$')

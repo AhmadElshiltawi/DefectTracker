@@ -1,105 +1,159 @@
-@import url('https://fonts.googleapis.com/css2?family=Allerta&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    background-color: #000000;
-    font-family: "Allerta", sans-serif;
-  }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  font-family: "Montserrat", sans-serif;
+}
 
-  .signupForm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+.signupForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-  a {
-    color: #ffffff;
-    text-decoration: none;
-  }
+a {
+  color: black;
+  text-decoration: none;
+}
 
-  a:visited {
-    color: #ffffff;
-    text-decoration: none;
-  }
+a:visited {
+  color: black;
+  text-decoration: none;
+}
 
-  .inputContainer {
-    position: relative;
-    height: 45px;
-    width: 90%;
-    margin-bottom: 17px;
-  }
+.inputContainer {
+  position: relative;
+  height: 45px;
+  width: 90%;
+  margin-bottom: 17px;
+}
 
-  .form {
-    background-color: #1c1b1b;
-    width: 400px;
-    border-radius: 16px;
-    padding: 20px 40px;
-    box-shadow: 0 10px 25px rgba(92, 99, 105, .2);
-  }
-  
-  .title {
-    font-size: 50px;
-    margin-bottom: 50px;
-    color: #ffffff;
-  }
+.inputContainerTextArea {
+  position: relative;
+  height: 210px;
+  width: 90%;
+  margin-bottom: 17px;
+}
 
-  .input {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    border: 2px solid #ffffff;
-    border-radius: 7px;
-    font-size: 16px;
-    padding: 0 20px;
-    outline: none;
-    background: none;
-    z-index: 1;
-    font-family: inherit;
-    color: #ffffff;
-  }
+.form {
+  background-color: rgba(255, 255, 255, 0.721);
+  width: 400px;
+  border-radius: 16px;
+  padding: 20px 40px;
+  box-shadow: 0 10px 25px rgba(92, 99, 105, 0.2);
+}
 
-  .input::placeholder {
-    color:#ffffff;
-  }
+.title {
+  font-size: 50px;
+  margin-bottom: 50px;
+  color: black;
+}
 
-  .submitBtn {
-    display: block;
-    margin-left: auto;
-    padding: 15px 30px;
-    border: none;
-    background-color: #576CBC;
-    color: #ffffff;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 30px;
-    font-family: inherit;
-  }
-  
-  .submitBtn:hover {
-    background-color: #6076cc;
-  }
+.input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  border: 2px solid black;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 0 20px;
+  outline: none;
+  background: none;
+  z-index: 1;
+  font-family: inherit;
+  color: black;
+  font-weight: 500;
+}
 
-  .input:focus + .label {
-    color:transparent;
-  }
+.input::placeholder {
+  color: black;
+}
 
-  .input:focus {
-    border: 2px solid #576CBC;
-  }
+.submitBtn {
+  display: block;
+  margin-left: auto;
+  padding: 15px 30px;
+  border: none;
+  background-color: #5f63b2;
+  color: black;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 30px;
+  font-family: inherit;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
 
-  .errorMessage {
-    font-family: inherit;
-    color: #EA5455;
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
+.submitBtn:hover {
+  background-color: #7277d4;
+}
 
-  .input:not(:placeholder-shown)+ .label {
-    color: transparent
-  }
+.input:focus + .label {
+  color: transparent;
+}
+
+.input:focus {
+  border: 2px solid #5f63b2;
+}
+
+.errorMessage {
+  font-family: inherit;
+  color: #ea5455;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.input:not(:placeholder-shown) + .label {
+  color: transparent;
+}
+
+select {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 50px;
+  width: 403px;
+  border: 2px solid black;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 0 18px;
+  outline: none;
+  background: none;
+  z-index: 1;
+  font-family: inherit;
+  color: black;
+  font-weight: 500;
+}
+
+.inputContainerTextArea textarea {
+  /* position: absolute; */
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  border: 2px solid black;
+  border-radius: 7px;
+  font-size: 16px;
+  padding: 0 20px;
+  outline: none;
+  background: none;
+  z-index: 1;
+  font-family: inherit;
+  color: black;
+  font-weight: 500;
+  resize: none;
+  padding-top: 10px;
+}
+
+.inputContainerTextArea textarea::placeholder {
+  color: black;
+  /* padding-top: 10px; */
+}

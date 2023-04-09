@@ -1,0 +1,184 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports</title>
+    <link rel="stylesheet" href="{% static 'main-content.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/c24fec9601.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <aside class="navbar">
+        <div class="logo">
+          <img src="./images/DefectTracker.png" alt="DefectTracker" />
+        </div>
+        <nav class="menu">
+          <div class="menu-items">
+            <ul>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"><i class="fa-solid fa-pen"></i></span>
+                  <span class="item">Reports</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"><i class="fa-solid fa-bug"></i></span>
+                  <span class="item">Bugs</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"
+                    ><i class="fa-solid fa-file-circle-plus"></i
+                  ></span>
+                  <span class="item">Features</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"
+                    ><i class="fa-solid fa-people-group"></i
+                  ></span>
+                  <span class="item">Teams</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"
+                    ><i class="fa-solid fa-diagram-project"></i
+                  ></span>
+                  <span class="item">projects</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"><i class="fa-solid fa-ticket"></i></span>
+                  <span class="item">Tickets</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="menu-item">
+                  <span class="icon"><i class="fa-solid fa-database"></i></span>
+                  <span class="item">Database</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="menu-lower">
+          <ul>
+            <li>
+              <a href="#" class="menu-item">
+                <span class="icon"
+                  ><i class="fa-solid fa-right-from-bracket"></i
+                ></span>
+                <span class="item">Sign out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="user-info">
+          <div class="user-logo">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div class="username">
+            <p>
+              Ahmad Elshiltawi
+              <br />
+              @Ahmad
+            </p>
+          </div>
+        </div>
+      </aside>
+      <div class="contents">
+        <div class="header">
+          <h1>Reports</h1>
+          <div class="buttons">
+            <button>Write a report</button>
+            <button>Save</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="fl-table">
+            <thead>
+              <h3>Ticket: 1238434</h3>
+              <tr>
+                <th>Delete</th>
+                <th>Date</th>
+                <th style="width: 70vw">Contents</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input type="checkbox" />
+                  </label>
+                </td>
+                <td contenteditable="true">29/3/2024</td>
+                <td contenteditable="true">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Praesent auctor augue libero, nec posuere mi scelerisque et.
+                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
+                  leo,
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-wrapper">
+          <table class="fl-table">
+            <thead>
+              <h3>Ticket: 12432321</h3>
+              <tr>
+                <th>Delete</th>
+                <th>Date</th>
+                <th style="width: 70vw">Contents</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input type="checkbox" />
+                  </label>
+                </td>
+                <td contenteditable="true">29/3/2022</td>
+                <td contenteditable="true">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Praesent auctor augue libero, nec posuere mi scelerisque et.
+                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
+                  leo,
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="switch">
+                    <input type="checkbox" />
+                  </label>
+                </td>
+                <td contenteditable="true">31/3/2022</td>
+                <td contenteditable="true">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Praesent auctor augue libero, nec posuere mi scelerisque et.
+                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
+                  leo,
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

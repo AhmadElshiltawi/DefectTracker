@@ -6,14 +6,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>DefectTracker Sign in</title>
+    <title>Create report</title>
     <link rel="stylesheet" href="{% static 'sign-form.css' %}" />
   </head>
   <body>
     <div class="signupForm">
       <form action="" method="POST" class="form">
         {% csrf_token %}
-        <h1 class="title">DefectTracker<br />Sign in</h1>
+        <h1 class="title">Create report</h1>
 
         <div class="errorMessage">
           {% for message in messages %} {{ message }} {% endfor %}
@@ -21,29 +21,28 @@
 
         <div class="inputContainer">
           <label>
-            <input
-              name="username"
-              type="text"
-              class="input"
-              placeholder="Username"
-            />
+            <select name="ticket-select" id="ticket-select">
+              <option value="">Select a ticket</option>
+              <option value="12345678">12345678</option>
+              <option value="12345679">12345679</option>
+              <option value="12345638">12345638</option>
+            </select>
           </label>
         </div>
 
-        <div class="inputContainer">
+        <div class="inputContainerTextArea">
           <label>
-            <input
-              name="password"
-              type="password"
-              class="input"
-              placeholder="Password"
-            />
+            <textarea
+              name = "contents"
+              class="textarea-input"
+              rows="5"
+              cols="100"
+              placeholder="Report contents"
+            ></textarea>
           </label>
         </div>
 
-        <input type="submit" class="submitBtn" value="Sign in" />
-        <br />
-        <a href="#"> Don't have an account? Create one here</a>
+        <input type="submit" class="submitBtn" value="Create report" />
       </form>
     </div>
   </body>

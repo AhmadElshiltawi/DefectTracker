@@ -6,14 +6,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>DefectTracker Sign in</title>
+    <title>Assign a leader</title>
     <link rel="stylesheet" href="{% static 'sign-form.css' %}" />
   </head>
   <body>
     <div class="signupForm">
       <form action="" method="POST" class="form">
         {% csrf_token %}
-        <h1 class="title">DefectTracker<br />Sign in</h1>
+        <h1 class="title">Assign a leader</h1>
 
         <div class="errorMessage">
           {% for message in messages %} {{ message }} {% endfor %}
@@ -21,29 +21,26 @@
 
         <div class="inputContainer">
           <label>
-            <input
-              name="username"
-              type="text"
-              class="input"
-              placeholder="Username"
-            />
+            <select name="project-select" id="project-select">
+              <option value="">Select a team</option>
+              <option value="12">12</option>
+              <option value="41">41</option>
+              <option value="2">2</option>
+            </select>
           </label>
         </div>
 
         <div class="inputContainer">
           <label>
-            <input
-              name="password"
-              type="password"
-              class="input"
-              placeholder="Password"
-            />
+            <select name="project-select" id="project-select">
+              <option value="">Select a user</option>
+              <option value="john">john</option>
+              <option value="name">name</option>
+            </select>
           </label>
         </div>
 
-        <input type="submit" class="submitBtn" value="Sign in" />
-        <br />
-        <a href="#"> Don't have an account? Create one here</a>
+        <input type="submit" class="submitBtn" value="Assign leader" />
       </form>
     </div>
   </body>
