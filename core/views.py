@@ -116,7 +116,9 @@ def create_bug(request):
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_bug(date, title, description, project, 'b')
-    return render(request, 'create-bug.html')
+    database.getProjects()
+    con = {"con": database.getProjects()}
+    return render(request, 'create-bug.html', con)
 
 def create_feature(request):
     if request.method == "POST":

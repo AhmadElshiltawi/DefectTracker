@@ -22,10 +22,9 @@
         <div class="inputContainer">
           <label>
             <select name="project-select" id="project-select">
-              <option value="">Select a project</option>
-              <option value="ProjectX">ProjectX</option>
-              <option value="ProjectY">ProjectY</option>
-              <option value="ProjectZ">ProjectZ</option>
+              {% for project_id in con %}
+              <option value="">{{project_id.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>

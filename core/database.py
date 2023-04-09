@@ -136,3 +136,27 @@ def create_report(ticketNo, description, date):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+
+def getProjects():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT project_id FROM project"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print(value)
+        print(sqlite_select_query)
+        print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
