@@ -83,9 +83,12 @@
           />
         </div>
 
-        <input type="submit" class="submitBtn" value="Sign up" />
+        {% comment %} <input type="submit" class="submitBtn" value="Sign up" />
         <br />
-        <a href="#"> Already have an account? sign in here.</a>
+        <a href="#"> Already have an account? sign in here.</a> {% endcomment %}
+        <input name="signin" type="submit" class="submitBtn" value="Sign in" />
+        <br />
+        <a href="http://127.0.0.1:8000/signin">Already have an account? sign in here.</a>
       </form>
     </div>
   </body>

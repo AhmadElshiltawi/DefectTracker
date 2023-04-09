@@ -41,9 +41,12 @@
           </label>
         </div>
 
-        <input type="submit" class="submitBtn" value="Sign in" />
+        {% comment %} <input name="password" type="submit" class="submitBtn" value="Sign in" />
         <br />
-        <a href="#"> Don't have an account? Create one here</a>
+        <a href="#"> Don't have an account? Create one here</a> {% endcomment %}
+        <input name="signup" type="submit" class="submitBtn" value="Sign in" />
+        <br />
+        <a href="http://127.0.0.1:8000/signup">Don't have an account? Create one here</a>
       </form>
     </div>
   </body>
