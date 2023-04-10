@@ -204,3 +204,45 @@ def checkuser(input_username, input_password):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def getTeam():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT team_no FROM team"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Record selected successfully from SqliteDb_developers table ", cursor.rowcount)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+
+def getUsers():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT user_id, first_name FROM user"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Record selected successfully from SqliteDb_developers table ", cursor.rowcount)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
