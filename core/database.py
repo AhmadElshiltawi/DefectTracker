@@ -1,19 +1,26 @@
 import random
 import sqlite3
 
-
 def insert_user(first_name, last_name, username, password, email):
     try:
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM user WHERE user_id = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0,999999999)
+                data = cursor.execute("SELECT * FROM user WHERE user_id = ?", (id,))
 
         sqlite_insert_query = """INSERT INTO user
                             (user_id, first_name, last_name, email, username, password) 
                             VALUES 
-                            (123,'Jafmes','Jamfes','blah@gfmail.com', 'blaoh', 'blfah')"""
-
-        count = cursor.execute(sqlite_insert_query)
+                            (?, ?, ?, ?, ?, ?)"""
+        val = (id,first_name,last_name, email,username, password)
+        count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
         cursor.close()
@@ -158,3 +165,42 @@ def getProjects():
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+    
+def checkdata(data, table_name, condition):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sql = "SELECT * FROM " + table_name + " WHERE " + condition + " = ?"
+        data = cursor.execute(sql, (data,))
+        if len(cursor.fetchall()) == 0: 
+            return False
+        else:
+            return True
+        
+    except sqlite3.Error as error:
+        print("Failed to check data in table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def checkuser(input_username, input_password):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        print("check user: ? \npassword: ?",(input_username, input_password))
+        sql = "SELECT * FROM user WHERE username = ? AND password = ?"
+        data = cursor.execute(sql, (input_username, input_password))
+        if len(cursor.fetchall()) == 0: 
+            return False
+        else:
+            return True
+        
+    except sqlite3.Error as error:
+        print("Failed to check data in table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
