@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
 from . import models
 from . import backend
 from . import database
@@ -99,15 +100,17 @@ def signup(request):
         return render(request, 'sign-up.html')
 
 def signin(request):
-
     if request.method == "POST":
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         if database.checkuser(username, password):
             request.session['username'] = username
+            request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
+            request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
             return redirect('index')
         else:
+            messages.info(request, "Invalid username or password!")
             return render(request, 'sign-in.html')
     else:
         return render(request, 'sign-in.html')
@@ -219,7 +222,9 @@ def teams(request):
 
 def logout(request):
     try:
-        del request.session['member_id']
+        del request.session['username']
+        del request.session['first_name']
+        del request.session['last_name']
     except KeyError:
         pass
-    return HttpResponse("You're logged out.")
+    return redirect('signin')

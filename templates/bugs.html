@@ -74,7 +74,7 @@
         <div class="menu-lower">
           <ul>
             <li>
-              <a href="#" class="menu-item">
+              <a href="{% url 'logout' %}" class="menu-item">
                 <span class="icon"
                   ><i class="fa-solid fa-right-from-bracket"></i
                 ></span>
@@ -90,9 +90,9 @@
           </div>
           <div class="username">
             <p>
-              Ahmad Elshiltawi
+              {{request.session.first_name }} {{ request.session.last_name }}
               <br />
-              @Ahmad
+              @{{request.session.username }}
             </p>
           </div>
         </div>
