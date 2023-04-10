@@ -11,10 +11,14 @@ from . import database
 
 # Create your views here.
 def index(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
     return redirect('bugs')
 
 
 def signup(request):
+    
     # if request.method == "POST":
     #     database.insert_user('a', 'a', 'a', 'a', 'a')
 
@@ -89,17 +93,19 @@ def signup(request):
     #     return redirect('index')
         database.insert_user(first_name, last_name, username, password, email_address)
 
-        return redirect('index')
+        return redirect('signin')
 
     else:
         return render(request, 'sign-up.html')
 
 def signin(request):
+
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
 
         if database.checkuser(username, password):
+            request.session['username'] = username
             return redirect('index')
         else:
             return render(request, 'sign-in.html')
@@ -108,21 +114,39 @@ def signin(request):
     
 
 def assign_leader(request):
-        return render(request, 'assign-leader.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'assign-leader.html')
 
 def assign_user(request):
-        return render(request, 'assign-user.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'assign-user.html')
 
 def assign_team(request):
-        return render(request, 'assign-team.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'assign-team.html')
 
 def bugs(request):
-        return render(request, 'bugs.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'bugs.html')
 
 def features(request):
-        return render(request, 'features.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'features.html')
 
 def create_bug(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
     if request.method == "POST":
         project = request.POST['project-select']
         title = request.POST['title']
@@ -133,6 +157,9 @@ def create_bug(request):
     return render(request, 'create-bug.html')
 
 def create_feature(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
     if request.method == "POST":
         project = request.POST['project-select']
         title = request.POST['title']
@@ -143,6 +170,9 @@ def create_feature(request):
     return render(request, 'create-feature.html')
 
 def create_project(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
     if request.method == "POST":
         description = request.POST['description']
         status = "Incomplete"
@@ -152,6 +182,9 @@ def create_project(request):
     return render(request, 'create-project.html')
 
 def create_report(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
     if request.method == "POST":
         ticket = request.POST['ticket-select']
         contents = request.POST['contents']
@@ -161,13 +194,32 @@ def create_report(request):
     return render(request, 'create-report.html')
 
 def tickets(request):
-        return render(request, 'tickets.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
+    return render(request, 'tickets.html')
 
 def reports(request):
-        return render(request, 'reports.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+    
+    return render(request, 'reports.html')
 
 def projects(request):
-        return render(request, 'projects.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'projects.html')
 
 def teams(request):
-        return render(request, 'teams.html')
+    if not request.session.has_key('username'):
+        return redirect('signin')
+        
+    return render(request, 'teams.html')
+
+def logout(request):
+    try:
+        del request.session['member_id']
+    except KeyError:
+        pass
+    return HttpResponse("You're logged out.")

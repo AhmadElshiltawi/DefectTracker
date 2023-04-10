@@ -31,13 +31,13 @@ def insert_user(first_name, last_name, username, password, email):
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
         id = random.randint(0,999999999)
-        data = cursor.execute("SELECT * FROM bug WHERE bug_id = ?", (id,))
+        data = cursor.execute("SELECT * FROM user_id WHERE user_id = ?", (id,))
         while True:
             if len(cursor.fetchall()) == 0:
                 break
             else:
                 id = random.randint(0,999999999)
-                data = cursor.execute("SELECT * FROM bug WHERE bug_id = ?", (id,))
+                data = cursor.execute("SELECT * FROM user_id WHERE user_id = ?", (id,))
 
         sqlite_insert_query = """INSERT INTO user
                             (user_id, first_name, last_name, email, username, password) 
