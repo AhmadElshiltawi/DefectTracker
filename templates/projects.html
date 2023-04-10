@@ -17,25 +17,28 @@
     <div class="container">
       <aside class="navbar">
         <div class="logo">
-          <img src="./images/DefectTracker.png" alt="DefectTracker" />
+          <img
+            src="{% static 'images/DefectTracker.png' %}"
+            alt="DefectTracker"
+          />
         </div>
         <nav class="menu">
           <div class="menu-items">
             <ul>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'reports' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-pen"></i></span>
                   <span class="item">Reports</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'bugs' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-bug"></i></span>
                   <span class="item">Bugs</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'features' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-file-circle-plus"></i
                   ></span>
@@ -43,7 +46,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'teams' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-people-group"></i
                   ></span>
@@ -51,7 +54,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'projects' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-diagram-project"></i
                   ></span>
@@ -59,15 +62,9 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'tickets' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-ticket"></i></span>
                   <span class="item">Tickets</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="menu-item">
-                  <span class="icon"><i class="fa-solid fa-database"></i></span>
-                  <span class="item">Database</span>
                 </a>
               </li>
             </ul>
