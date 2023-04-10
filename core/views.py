@@ -223,3 +223,4 @@ def logout(request):
     except KeyError:
         pass
     return HttpResponse("You're logged out.")
+
