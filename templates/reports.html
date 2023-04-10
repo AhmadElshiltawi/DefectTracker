@@ -101,7 +101,9 @@
         <div class="header">
           <h1>Reports</h1>
           <div class="buttons">
-            <button>Write a report</button>
+            <form action="{% url 'create-report' %}">
+              <button>Write a report</button>
+            </form>
             <button>Save</button>
           </div>
         </div>

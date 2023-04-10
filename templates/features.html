@@ -101,7 +101,9 @@
         <div class="header">
           <h1>Features</h1>
           <div class="buttons">
-            <button>Add a feature</button>
+            <form action="{% url 'create-feature' %}">
+              <button>Add a feature</button>
+            </form>
             <button>Save</button>
           </div>
         </div>

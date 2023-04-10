@@ -101,7 +101,9 @@
         <div class="header">
           <h1>Bugs</h1>
           <div class="buttons">
-            <button>Add a bug</button>
+            <form action="{% url 'create-bug' %}">
+              <button>Add a bug</button>
+            </form>
             <button>Save</button>
           </div>
         </div>

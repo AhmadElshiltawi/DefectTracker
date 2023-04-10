@@ -16,7 +16,8 @@ urlpatterns = [
     path('create_feature', views.create_feature, name='create-feature'),
     path('create_bug', views.create_bug, name='create-bug'),
     path('bugs', views.bugs, name='bugs'),
-    path('assign_user', views.assign_user, name='assign-leader'),
+    path('assign_user', views.assign_user, name='assign-user'),
     path('assign_team', views.assign_team, name='assign-team'),
     path('logout', views.logout, name='logout'),
+    path('create_team', views.create_team, name='create-team'),
 ]

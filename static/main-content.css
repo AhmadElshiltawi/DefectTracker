@@ -218,6 +218,10 @@
   margin: 5px;
 }
 
+.buttons form {
+  display: inline;
+}
+
 .fl-table button {
   border-radius: 4px;
   background-color: #5f63b2;

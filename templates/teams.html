@@ -101,9 +101,16 @@
         <div class="header">
           <h1>Teams</h1>
           <div class="buttons">
-            <button>Assign a leader</button>
-            <button>Create a team</button>
-            <button>Assign a user</button>
+            <form action="{% url 'assign-leader' %}">
+              <button>Assign a leader</button>
+            </form>
+            <form action="{% url 'create-team' %}">
+              <button>Create a team</button>
+            </form>
+            <form action="{% url 'assign-user' %}">
+              <button>Assign a user</button>
+            </form>
+
             <button>Save</button>
           </div>
         </div>

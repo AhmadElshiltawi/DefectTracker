@@ -119,13 +119,8 @@ def signin(request):
 def assign_leader(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    if request.method == "POST":
-        team = request.POST['team-select']
-        leader = request.POSt['user-select']
-
-    con = database.getTeam()
-    con2 = database.getUsers()
-    return render(request, 'assign-leader.html',{"team":con, "users":con2})
+        
+    return render(request, 'assign-leader.html')
 
 def assign_user(request):
     if not request.session.has_key('username'):
@@ -142,7 +137,7 @@ def assign_team(request):
 def bugs(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-
+        
     return render(request, 'bugs.html')
 
 def features(request):
@@ -157,16 +152,12 @@ def create_bug(request):
     
     if request.method == "POST":
         project = request.POST['project-select']
-        if project == "Choose a project":
-            messages.info(request, 'No project selected! Try again')
-            return redirect('create-bug')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_bug(date, title, description, project, 'b')
         return redirect('index')
-    con = database.getProjects()
-    return render(request, 'create-bug.html',{"con":con})
+    return render(request, 'create-bug.html')
 
 def create_feature(request):
     if not request.session.has_key('username'):
@@ -174,16 +165,12 @@ def create_feature(request):
     
     if request.method == "POST":
         project = request.POST['project-select']
-        if project == "Choose a project":
-            messages.info(request, 'No project selected! Try again')
-            return redirect('create-bug')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_featureRequest(date, title, description, project, 'b')
         return redirect('index')
-    proj = database.getProjects()
-    return render(request, 'create-feature.html',{"con":proj})
+    return render(request, 'create-feature.html')
 
 def create_project(request):
     if not request.session.has_key('username'):
@@ -241,3 +228,7 @@ def logout(request):
     except KeyError:
         pass
     return redirect('signin')
+
+
+def create_team(request):
+    return render(request, 'create-team.html')
