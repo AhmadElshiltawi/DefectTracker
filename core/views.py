@@ -112,6 +112,9 @@ def features(request):
 def create_bug(request):
     if request.method == "POST":
         project = request.POST['project-select']
+        print("reached")
+        print(project)
+        print(type(project))
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
@@ -127,7 +130,9 @@ def create_feature(request):
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_featureRequest(date, title, description, project, 'b')
-    return render(request, 'create-feature.html')
+    database.getProjects()
+    con = {"con": database.getProjects()}
+    return render(request, 'create-feature.html',con)
 
 def create_project(request):
     if request.method == "POST":

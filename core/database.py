@@ -105,7 +105,7 @@ def create_project(start_date, status, description, admin_id):
         val = (id, start_date, status, description, admin_id)
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
-        print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall))
         cursor.close()
 
     except sqlite3.Error as error:
@@ -148,13 +148,11 @@ def getProjects():
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
-        print(value)
-        print(sqlite_select_query)
-        print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
+        print("Record selected successfully from SqliteDb_developers table ", cursor.rowcount)
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Failed to insert data into sqlite table", error)
+        print("Failed to select data from sqlite table", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()

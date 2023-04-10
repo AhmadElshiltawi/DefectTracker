@@ -22,8 +22,9 @@
         <div class="inputContainer">
           <label>
             <select name="project-select" id="project-select">
+              <option selected disabled>Choose a project</option>
               {% for project_id in con %}
-              <option value="">{{project_id.0}}</option>
+              <option value={{project_id.0}} >{{project_id.0}}</option>
               {% endfor %}
             </select>
           </label>
@@ -47,7 +48,7 @@
               class="textarea-input"
               rows="5"
               cols="100"
-              placeholder="Bug Description"
+              placeholder="Describe the bug"
             ></textarea>
           </label>
         </div>

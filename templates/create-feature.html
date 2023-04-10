@@ -22,10 +22,10 @@
         <div class="inputContainer">
           <label>
             <select name="project-select" id="project-select">
-              <option value="">Select a project</option>
-              <option value="ProjectX">ProjectX</option>
-              <option value="ProjectY">ProjectY</option>
-              <option value="ProjectZ">ProjectZ</option>
+              <option selected disabled>Choose a project</option>
+              {% for project_id in con %}
+              <option value={{project_id.0}} >{{project_id.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>
@@ -36,7 +36,7 @@
               name="title"
               type="text"
               class="input"
-              placeholder="feature title"
+              placeholder="Request Title"
             />
           </label>
         </div>
@@ -48,7 +48,7 @@
               class="textarea-input"
               rows="5"
               cols="100"
-              placeholder="Feature Description"
+              placeholder="Feature Request Description"
             ></textarea>
           </label>
         </div>
