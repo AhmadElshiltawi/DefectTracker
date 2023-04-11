@@ -145,8 +145,10 @@ def assign_team(request):
 def bugs(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    bugs = {"bugs":database.getBugs()}
+    
         
-    return render(request, 'bugs.html')
+    return render(request, 'bugs.html', bugs)
 
 def features(request):
     if not request.session.has_key('username'):

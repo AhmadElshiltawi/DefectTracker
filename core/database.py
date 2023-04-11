@@ -214,6 +214,28 @@ def getProjects():
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+
+def getBugs():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT bug_id, project_id, bug_date, bug_title, bug_description, user_id FROM bug"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        for row in cursor.fetchall():
+            value.append(row)
+        print("Record selected successfully from SqliteDb_developers table ", value)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
     
 def checkdata(data, table_name, condition):
     try:
@@ -343,7 +365,7 @@ def select_userID(username):
             print("The SQLite connection is closed")
         return user_id
     
-
+# Temp function to add admin
 def add_admin(user_id):
     try:
         sqliteConnection = sqlite3.connect('db.sqlite3')
