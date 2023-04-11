@@ -176,15 +176,6 @@ def create_report(ticketNo, description, date):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "Select * from progress_report WHERE ticket_no = ?"
-        val = (ticketNo,)
-        cursor.execute(sqlite_select_query, val)
-        sqliteConnection.commit()
-        if len(cursor.fetchall()) == 0:
-            sqlite_insert_query = "INSERT INTO progress_report (ticket_no) VALUES (?)"
-            cursor.execute(sqlite_insert_query, val)
-            sqliteConnection.commit()
-            cursor.fetchall()
         sqlite_insert_query = """INSERT INTO progress_contents
                                     (ticket_no, description, progress_date) 
                                     VALUES 
