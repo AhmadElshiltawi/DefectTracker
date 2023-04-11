@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
 from . import models
 from . import backend
 from . import database
@@ -99,15 +100,25 @@ def signup(request):
         return render(request, 'sign-up.html')
 
 def signin(request):
-
+    
     if request.method == "POST":
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         if database.checkuser(username, password):
             request.session['username'] = username
+            request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
+            request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
+            user_id = database.select_userID(username)
+            if database.checkdata(user_id, "admin", "admin_id"):
+                messages.info(request, 'Admin login')
+                request.session['admin'] = "True"
+            else:
+                messages.info(request, 'Collaborator login')
+                request.session['admin'] = "False"
             return redirect('index')
         else:
+            messages.info(request, "Invalid username or password!")
             return render(request, 'sign-in.html')
     else:
         return render(request, 'sign-in.html')
@@ -146,15 +157,21 @@ def features(request):
 def create_bug(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    
+
     if request.method == "POST":
         project = request.POST['project-select']
+        if project == "Choose a project":
+            messages.info(request, 'No project selected! Try again')
+            return redirect('create-bug')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_bug(date, title, description, project, 'b')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.add_bug(date, title, description, project, ID)
         return redirect('index')
-    return render(request, 'create-bug.html')
+    con = {"con":database.getProjects()}
+    return render(request, 'create-bug.html',con)
 
 def create_feature(request):
     if not request.session.has_key('username'):
@@ -162,22 +179,31 @@ def create_feature(request):
     
     if request.method == "POST":
         project = request.POST['project-select']
+        if project == "Choose a project":
+            messages.info(request, 'No project selected! Try again')
+            return redirect('create-feature')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_featureRequest(date, title, description, project, 'b')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.add_featureRequest(date, title, description, project, ID)
         return redirect('index')
-    return render(request, 'create-feature.html')
+    con = {"con":database.getProjects()}
+    return render(request, 'create-feature.html',con)
 
 def create_project(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
     if request.method == "POST":
+        name = request.POST['title']
         description = request.POST['description']
         status = "Incomplete"
         date = timezone.now().strftime("%Y-%m-%d")
-        database.create_project(date, status, description, 'b')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.create_project(date, status, description, ID,name)
         return redirect('index')
     return render(request, 'create-project.html')
 
@@ -187,11 +213,15 @@ def create_report(request):
     
     if request.method == "POST":
         ticket = request.POST['ticket-select']
+        if ticket == "Select a ticket":
+            messages.info(request, 'No ticket selected! Try again')
+            return redirect('create-report')
         contents = request.POST['contents']
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
         return redirect('index')
-    return render(request, 'create-report.html')
+    con = {"con":database.getTickets()}
+    return render(request, 'create-report.html',con)
 
 def tickets(request):
     if not request.session.has_key('username'):
@@ -219,8 +249,21 @@ def teams(request):
 
 def logout(request):
     try:
-        del request.session['member_id']
+        del request.session['username']
+        del request.session['first_name']
+        del request.session['last_name']
+        del request.session['admin'] 
     except KeyError:
         pass
-    return HttpResponse("You're logged out.")
+    return redirect('signin')
 
+
+def create_team(request):
+    if request.method == "POST":
+        leader = request.POST['leader-select']
+        if leader == "Select a leader":
+            messages.info(request, 'Select a leader for the team!')
+            return redirect('create-team')
+        database.createTeam(leader)
+    con = {"con": database.getCollaborators()}
+    return render(request, 'create-team.html',con)

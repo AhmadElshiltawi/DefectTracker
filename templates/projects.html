@@ -17,25 +17,28 @@
     <div class="container">
       <aside class="navbar">
         <div class="logo">
-          <img src="./images/DefectTracker.png" alt="DefectTracker" />
+          <img
+            src="{% static 'images/DefectTracker.png' %}"
+            alt="DefectTracker"
+          />
         </div>
         <nav class="menu">
           <div class="menu-items">
             <ul>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'reports' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-pen"></i></span>
                   <span class="item">Reports</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'bugs' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-bug"></i></span>
                   <span class="item">Bugs</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'features' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-file-circle-plus"></i
                   ></span>
@@ -43,7 +46,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'teams' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-people-group"></i
                   ></span>
@@ -51,7 +54,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'projects' %}" class="menu-item">
                   <span class="icon"
                     ><i class="fa-solid fa-diagram-project"></i
                   ></span>
@@ -59,15 +62,9 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="menu-item">
+                <a href="{% url 'tickets' %}" class="menu-item">
                   <span class="icon"><i class="fa-solid fa-ticket"></i></span>
                   <span class="item">Tickets</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="menu-item">
-                  <span class="icon"><i class="fa-solid fa-database"></i></span>
-                  <span class="item">Database</span>
                 </a>
               </li>
             </ul>
@@ -77,7 +74,7 @@
         <div class="menu-lower">
           <ul>
             <li>
-              <a href="#" class="menu-item">
+              <a href="{% url 'logout' %}" class="menu-item">
                 <span class="icon"
                   ><i class="fa-solid fa-right-from-bracket"></i
                 ></span>
@@ -93,9 +90,9 @@
           </div>
           <div class="username">
             <p>
-              Ahmad Elshiltawi
+              {{request.session.first_name }} {{ request.session.last_name }}
               <br />
-              @Ahmad
+              @{{request.session.username }}
             </p>
           </div>
         </div>
@@ -104,8 +101,12 @@
         <div class="header">
           <h1>Projects</h1>
           <div class="buttons">
-            <button>Assign a team</button>
-            <button>Create a project</button>
+            <form action="{% url 'assign-team' %}">
+              <button>Assign a team</button>
+            </form>
+            <form action="{% url 'create-project' %}">
+              <button>Create a project</button>
+            </form>
             <button>Save</button>
           </div>
         </div>

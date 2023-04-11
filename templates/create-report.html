@@ -22,10 +22,10 @@
         <div class="inputContainer">
           <label>
             <select name="ticket-select" id="ticket-select">
-              <option value="">Select a ticket</option>
-              <option value="12345678">12345678</option>
-              <option value="12345679">12345679</option>
-              <option value="12345638">12345638</option>
+              <option value="Select a ticket">Select a ticket</option>
+              {% for ticket in con %}
+              <option value={{ticket.0}} >{{ticket.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>
