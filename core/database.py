@@ -318,7 +318,7 @@ def getCollaborators():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT collaborator_id FROM collaborator"
+        sqlite_select_query = "SELECT user_id, username FROM user, collaborator WHERE collaborator_id = user_id"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
