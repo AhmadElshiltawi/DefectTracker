@@ -185,10 +185,11 @@ def create_project(request):
         return redirect('signin')
     
     if request.method == "POST":
+        name = request.POST['title']
         description = request.POST['description']
         status = "Incomplete"
         date = timezone.now().strftime("%Y-%m-%d")
-        database.create_project(date, status, description, 'b')
+        database.create_project(date, status, description, 'b',name)
         return redirect('index')
     return render(request, 'create-project.html')
 
@@ -198,11 +199,15 @@ def create_report(request):
     
     if request.method == "POST":
         ticket = request.POST['ticket-select']
+        if ticket == "Select a ticket":
+            messages.info(request, 'No ticket selected! Try again')
+            return redirect('create-report')
         contents = request.POST['contents']
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
         return redirect('index')
-    return render(request, 'create-report.html')
+    con = {"con":database.getTickets()}
+    return render(request, 'create-report.html',con)
 
 def tickets(request):
     if not request.session.has_key('username'):
