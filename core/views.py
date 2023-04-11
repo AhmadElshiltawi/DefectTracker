@@ -173,7 +173,7 @@ def create_bug(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.add_bug(date, title, description, project, ID)
-        return redirect('index')
+        return redirect('bugs')
     con = {"con":database.getProjects()}
     return render(request, 'create-bug.html',con)
 
@@ -192,7 +192,7 @@ def create_feature(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.add_featureRequest(date, title, description, project, ID)
-        return redirect('index')
+        return redirect('features')
     con = {"con":database.getProjects()}
     return render(request, 'create-feature.html',con)
 
@@ -208,7 +208,7 @@ def create_project(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.create_project(date, status, description, ID,name)
-        return redirect('index')
+        return redirect('projects')
     return render(request, 'create-project.html')
 
 def create_report(request):
@@ -223,7 +223,7 @@ def create_report(request):
         contents = request.POST['contents']
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
-        return redirect('index')
+        return redirect('reports')
     con = {"con":database.getTickets()}
     return render(request, 'create-report.html',con)
 

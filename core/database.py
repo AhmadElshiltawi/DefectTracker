@@ -221,7 +221,7 @@ def getBugPage():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT bug_id, project_id, bug_date, bug_title, bug_description, user_id FROM bug"
+        sqlite_select_query = "SELECT bug.bug_id, project.project_name, bug.bug_date, bug.bug_title, bug.bug_description, user.username FROM bug, project, user Where bug.project_id = project.project_id AND bug.user_id = user.user_id"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         for row in cursor.fetchall():
@@ -265,7 +265,7 @@ def getFeaturePage():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT feature_id, project_id, feature_date, feature_title, feature_description, user_id FROM feature"
+        sqlite_select_query = "SELECT feature.feature_id, project.project_name, feature.feature_date, feature.feature_title, feature.feature_description, user.username FROM feature, project, user WHERE feature.project_id = project.project_id AND feature.user_id = user.user_id"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         for row in cursor.fetchall():
@@ -292,6 +292,40 @@ def getTicketPage():
         sqliteConnection.commit()
         for row in cursor.fetchall():
             value.append(row)
+        print("Record selected successfully from SqliteDb_developers table ", value)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+    
+def getReportPage():   
+    element = []
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT * FROM progress_report"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        tickets = cursor.fetchall()
+
+        
+        for no in tickets:
+            tickets = []
+            tickets.append(no)
+            sqlite_select_query = "SELECT progress_date, description FROM progress_contents WHERE ticket_no = ?"
+            cursor.execute(sqlite_select_query,(no))
+            sqliteConnection.commit()
+            for row in cursor.fetchall():
+                element.append(row)
+            tickets.append(element)
+            value.append(element)
         print("Record selected successfully from SqliteDb_developers table ", value)
         cursor.close()
 
