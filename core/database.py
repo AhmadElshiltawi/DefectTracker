@@ -480,3 +480,63 @@ def assignTeam(team, ID, project):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def delete_bug(bug_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"DELETE from bug WHERE bug_id = (?)"
+        val = (bug_id, )
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Deleted bug id: " + str(bug_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_bug_title(bug_id, title):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE bug SET bug_title=(?) WHERE bug_id=(?)"
+        val = (title, bug_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update bug id: " + str(bug_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_bug_description(bug_id, description):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE bug SET bug_description=(?) WHERE bug_id=(?)"
+        val = (description, bug_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update bug id: " + str(bug_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
