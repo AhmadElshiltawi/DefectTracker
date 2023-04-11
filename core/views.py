@@ -123,11 +123,11 @@ def assign_leader(request):
         team = request.POST['team-select']
         if team == "Select a team":
             messages.info(request, 'Select a team')
-            return redirect('assign-user')
+            return redirect('assign-leader')
         user = request.POST['user-select']
         if user == "Select a leader":
             messages.info(request, 'Select a leader')
-            return redirect('assign-user')
+            return redirect('assign-leader')
         database.updateLeader(team,user)
         return redirect('teams')
     con = {"team":database.getTeams(), "users":database.getCollaborators()}
