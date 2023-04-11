@@ -21,21 +21,22 @@
 
         <div class="inputContainer">
           <label>
-            <select name="project-select" id="project-select">
-              <option value="">Select a team</option>
-              <option value="12">12</option>
-              <option value="41">41</option>
-              <option value="2">2</option>
+            <select name="team-select" id="team-select">
+              <option value="Select a team">Select a team</option>
+              {% for value in team %}
+              <option value={{value.0}} >{{value.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>
 
         <div class="inputContainer">
           <label>
-            <select name="project-select" id="project-select">
-              <option value="">Select a user</option>
-              <option value="john">john</option>
-              <option value="name">name</option>
+            <select name="user-select" id="user-select">
+              <option value="Select a user">Select a user</option>
+              {% for value in users %}
+              <option value={{value.0}} >{{value.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>

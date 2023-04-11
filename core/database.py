@@ -294,7 +294,7 @@ def createTeam(leader):
                                     (team_no, no_people, leader_id) 
                                     VALUES 
                                     (?,?,?)"""
-        val = (teamNumber, 0, leader)
+        val = (teamNumber, 1, leader)
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
@@ -327,6 +327,7 @@ def getCollaborators():
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+
 def select_userID(username):
     try:
         sqliteConnection = sqlite3.connect('db.sqlite3')
@@ -342,3 +343,69 @@ def select_userID(username):
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return user_id
+
+
+def assignUser(team, user):
+    noDuplicate = True
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        # verify user isnt already assigned to the project
+        sql_verify_query = "Select * FROM works_in WHERE collaborator_id = ? AND team_no = ?"
+        cursor.execute(sql_verify_query, (user, team))
+        sqliteConnection.commit()
+        if len(cursor.fetchall()) != 0:
+            noDuplicate = False
+            return
+        # insert them into the project
+        sqlite_insert_query = """INSERT INTO works_in
+                                    (collaborator_id, team_no) 
+                                    VALUES 
+                                    (?,?)"""
+        val = (user,team)
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        cursor.fetchall()
+        print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
+        # update number of members in team
+        sqlite_select_query = "Select count(*) FROM works_in WHERE team_no = ?"
+        val = (team,)
+        count  = cursor.execute(sqlite_select_query,val)
+        sqliteConnection.commit()
+        count = cursor.fetchall()[0][0]
+        sqlite_update_query = "UPDATE team SET no_people = ? WHERE team_no = ?"
+        val = (count, team)
+        cursor.execute(sqlite_update_query, val)
+        sqliteConnection.commit()
+        cursor.fetchall()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return noDuplicate
+
+def getTeams():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT team_no FROM team"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Record selected successfully from SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value

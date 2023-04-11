@@ -125,8 +125,20 @@ def assign_leader(request):
 def assign_user(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'assign-user.html')
+    if request.method == "POST":
+        team = request.POST['team-select']
+        if team == "Select a team":
+            messages.info(request, 'Select a team')
+            return redirect('assign-user')
+        user = request.POST['user-select']
+        if user == "Select a user":
+            messages.info(request, 'Select a user')
+            return redirect('assign-user')
+        if not database.assignUser(team, user):
+            messages.info(request, 'This user is already in the team.')
+            return redirect('assign-user')
+    con = {"team":database.getTeams(), "users":database.getCollaborators()}
+    return render(request, 'assign-user.html',con)
 
 def assign_team(request):
     if not request.session.has_key('username'):
