@@ -204,7 +204,7 @@ def getProjects():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT project_id FROM project"
+        sqlite_select_query = "SELECT project_id,project_name FROM project"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
