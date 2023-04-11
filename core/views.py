@@ -129,6 +129,7 @@ def assign_leader(request):
             messages.info(request, 'Select a user')
             return redirect('assign-user')
         database.updateLeader(team,user)
+        return redirect('teams')
     con = {"team":database.getTeams(), "users":database.getCollaborators()}
     return render(request, 'assign-leader.html',con)
 
@@ -147,6 +148,7 @@ def assign_user(request):
         if not database.assignUser(team, user):
             messages.info(request, 'This user is already in the team.')
             return redirect('assign-user')
+        return redirect('teams')
     con = {"team":database.getTeams(), "users":database.getCollaborators()}
     return render(request, 'assign-user.html',con)
 
@@ -204,7 +206,7 @@ def create_feature(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.add_featureRequest(date, title, description, project, ID)
-        return redirect('index')
+        return redirect('features')
     con = {"con":database.getProjects()}
     return render(request, 'create-feature.html',con)
 
@@ -220,7 +222,7 @@ def create_project(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.create_project(date, status, description, ID,name)
-        return redirect('index')
+        return redirect('projects')
     return render(request, 'create-project.html')
 
 def create_report(request):
@@ -235,7 +237,7 @@ def create_report(request):
         contents = request.POST['contents']
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
-        return redirect('index')
+        return redirect('reports')
     con = {"con":database.getTickets()}
     return render(request, 'create-report.html',con)
 
@@ -280,5 +282,6 @@ def create_team(request):
             messages.info(request, 'Select a leader for the team!')
             return redirect('create-team')
         database.createTeam(leader)
+        return redirect('teams')
     con = {"con": database.getCollaborators()}
     return render(request, 'create-team.html',con)
