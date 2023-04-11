@@ -275,3 +275,55 @@ def getTickets():
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+
+
+def createTeam(leader):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        teamNumber = random.randint(0, 999999999)
+        data = cursor.execute("SELECT * FROM team WHERE team_no = ?", (teamNumber,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0, 999999999)
+                data = cursor.execute("SELECT * FROM team WHERE team_no = ?", (teamNumber,))
+        sqlite_insert_query = """INSERT INTO team
+                                    (team_no, no_people, leader_id) 
+                                    VALUES 
+                                    (?,?,?)"""
+        val = (teamNumber, 0, leader)
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def getCollaborators():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT collaborator_id FROM collaborator"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Record selected successfully from SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value

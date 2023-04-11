@@ -244,4 +244,11 @@ def logout(request):
 
 
 def create_team(request):
-    return render(request, 'create-team.html')
+    if request.method == "POST":
+        leader = request.POST['leader-select']
+        if leader == "Select a leader":
+            messages.info(request, 'Select a leader for the team!')
+            return redirect('create-team')
+        database.createTeam(leader)
+    con = {"con": database.getCollaborators()}
+    return render(request, 'create-team.html',con)

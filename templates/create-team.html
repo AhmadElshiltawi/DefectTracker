@@ -21,10 +21,11 @@
 
         <div class="inputContainer">
           <label>
-            <select name="project-select" id="project-select">
-              <option value="">Select a leader</option>
-              <option value="john">john</option>
-              <option value="name">name</option>
+            <select name="leader-select" id="leader-select">
+              <option value="Select a leader">Select a leader</option>
+              {% for collab_id in con %}
+              <option value={{collab_id.0}} >{{collab_id.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>
