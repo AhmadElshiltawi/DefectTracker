@@ -99,6 +99,7 @@ def add_bug(date, title, description, project_id, user_id):
                                      VALUES 
                                      (?,?,?,?, ?, ?)"""
          val = (id,date,title,description, project_id, user_id)
+         cursor.execute("PRAGMA foreign_keys = ON;")
          count = cursor.execute(sqlite_insert_query, val)
          sqliteConnection.commit()
          print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
@@ -129,6 +130,7 @@ def add_featureRequest(date, title, description, project_id, user_id):
                                     VALUES 
                                     (?,?,?,?, ?, ?)"""
         val = (id, date, title, description, project_id, user_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
@@ -159,6 +161,7 @@ def create_project(start_date, status, description, admin_id,name):
                                     VALUES 
                                     (?,?,?,?, ?, ?)"""
         val = (id, start_date, status, description, admin_id, name)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
@@ -176,20 +179,12 @@ def create_report(ticketNo, description, date):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "Select * from progress_report WHERE ticket_no = ?"
-        val = (ticketNo,)
-        cursor.execute(sqlite_select_query, val)
-        sqliteConnection.commit()
-        if len(cursor.fetchall()) == 0:
-            sqlite_insert_query = "INSERT INTO progress_report (ticket_no) VALUES (?)"
-            cursor.execute(sqlite_insert_query, val)
-            sqliteConnection.commit()
-            cursor.fetchall()
         sqlite_insert_query = """INSERT INTO progress_contents
                                     (ticket_no, description, progress_date) 
                                     VALUES 
                                     (?,?,?)"""
         val = (ticketNo, description, date)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", cursor.rowcount)
@@ -209,7 +204,7 @@ def getProjects():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT project_id FROM project"
+        sqlite_select_query = "SELECT project_id,project_name FROM project"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
@@ -304,6 +299,7 @@ def createTeam(leader):
                                     VALUES 
                                     (?,?,?)"""
         val = (teamNumber, 1, leader)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
@@ -373,6 +369,7 @@ def assignUser(team, user):
                                     VALUES 
                                     (?,?)"""
         val = (user,team)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         cursor.fetchall()
@@ -385,6 +382,7 @@ def assignUser(team, user):
         count = cursor.fetchall()[0][0]
         sqlite_update_query = "UPDATE team SET no_people = ? WHERE team_no = ?"
         val = (count, team)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute(sqlite_update_query, val)
         sqliteConnection.commit()
         cursor.fetchall()
@@ -427,6 +425,7 @@ def updateLeader(team, user):
         print("Successfully Connected to SQLite")
         sqlite_update_query = "UPDATE team SET leader_id = ? WHERE team_no = ?"
         val = (user, team)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute(sqlite_update_query, val)
         sqliteConnection.commit()
         cursor.fetchall()
@@ -448,6 +447,7 @@ def assignTeam(team, ID, project):
         print("Successfully Connected to SQLite")
         sqlite_insert_query = "INSERT into assigns (team_no, admin_id, project_id) values (?, ?, ?)"
         val = (team, ID, project)
+        cursor.execute("PRAGMA foreign_keys = ON;")
         cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         cursor.fetchall()

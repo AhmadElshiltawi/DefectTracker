@@ -35,7 +35,7 @@
             <select name="project-select" id="project-select">
               <option value="Select a project">Select a project</option>
               {% for value in project %}
-              <option value={{value.0}} >{{value.0}}</option>
+              <option value={{value.0}} >{{value.1}} - {{value.0}}</option>
               {% endfor %}
             </select>
           </label>

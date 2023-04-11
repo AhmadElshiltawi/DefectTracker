@@ -24,7 +24,7 @@
             <select name="project-select" id="project-select">
               <option value ="Choose a project">Choose a project</option>
               {% for project_id in con %}
-              <option value={{project_id.0}} >{{project_id.0}}</option>
+              <option value={{project_id.0}} >{{project_id.1}} - {{project_id.0}}</option>
               {% endfor %}
             </select>
           </label>
