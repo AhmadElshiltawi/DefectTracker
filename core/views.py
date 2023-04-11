@@ -158,7 +158,9 @@ def create_bug(request):
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_bug(date, title, description, project, 'b')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.add_bug(date, title, description, project, ID)
         return redirect('index')
     con = {"con":database.getProjects()}
     return render(request, 'create-bug.html',con)
@@ -175,7 +177,9 @@ def create_feature(request):
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
-        database.add_featureRequest(date, title, description, project, 'b')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.add_featureRequest(date, title, description, project, ID)
         return redirect('index')
     con = {"con":database.getProjects()}
     return render(request, 'create-feature.html',con)
@@ -189,7 +193,9 @@ def create_project(request):
         description = request.POST['description']
         status = "Incomplete"
         date = timezone.now().strftime("%Y-%m-%d")
-        database.create_project(date, status, description, 'b',name)
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.create_project(date, status, description, ID,name)
         return redirect('index')
     return render(request, 'create-project.html')
 
