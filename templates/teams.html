@@ -98,6 +98,9 @@
         </div>
       </aside>
       <div class="contents">
+        {% for message in messages %}
+        <div class="errorMessage">{{ message }}</div>
+        {% endfor %}
         <div class="header">
           <h1>Teams</h1>
           <div class="buttons">

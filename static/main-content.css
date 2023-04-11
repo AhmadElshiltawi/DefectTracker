@@ -248,3 +248,14 @@
   transform: scale(1.5);
   accent-color: #5f63b2;
 }
+
+.contents .errorMessage {
+  color: white;
+  background-color: #ea5455;
+  text-align: center;
+  padding: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+}
