@@ -245,6 +245,9 @@ def create_report(request):
             messages.info(request, 'No ticket selected! Try again')
             return redirect('create-report')
         contents = request.POST['contents']
+        if contents == "":
+            messages.info(request, 'Enter a description!')
+            return redirect('create-report')
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
         return redirect('reports')
