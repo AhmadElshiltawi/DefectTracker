@@ -124,24 +124,21 @@
               </tr>
             </thead>
             <tbody>
+              {% for project in projects %}
               <tr>
                 <td>
                   <label class="switch">
                     <input type="checkbox" />
                   </label>
                 </td>
-                <td contenteditable="true">12345678</td>
-                <td contenteditable="true">Project X</td>
-                <td contenteditable="true">29/3/2024</td>
-                <td contenteditable="true">Maintenance</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-                <td>Ahmad</td>
+                <td contenteditable="true">{{project.0}}</td>
+                <td contenteditable="true">{{project.1}}</td>
+                <td contenteditable="true">{{project.2}}</td>
+                <td contenteditable="true">{{project.3}}</td>
+                <td contenteditable="true">{{project.4}}</td>
+                <td>{{project.5}}</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>

@@ -145,16 +145,18 @@ def assign_team(request):
 def bugs(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    bugs = {"bugs":database.getBugs()}
     
+    bugs = {"bugs":database.getBugPage()}
         
     return render(request, 'bugs.html', bugs)
 
 def features(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'features.html')
+    
+    features = {"features":database.getFeaturePage()}
+
+    return render(request, 'features.html', features)
 
 def create_bug(request):
     if not request.session.has_key('username'):
@@ -229,19 +231,24 @@ def tickets(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
-    return render(request, 'tickets.html')
+    tickets = {"tickets":database.getTicketPage()}
+    return render(request, 'tickets.html', tickets)
 
 def reports(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    
+    #reports = {"reports":database.getReportPage()}
     
     return render(request, 'reports.html')
 
 def projects(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    
+    projects = {"projects":database.getProjectPage()}
         
-    return render(request, 'projects.html')
+    return render(request, 'projects.html', projects)
 
 def teams(request):
     if not request.session.has_key('username'):
@@ -269,3 +276,4 @@ def create_team(request):
         database.createTeam(leader)
     con = {"con": database.getCollaborators()}
     return render(request, 'create-team.html',con)
+
