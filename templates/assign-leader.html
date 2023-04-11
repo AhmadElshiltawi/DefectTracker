@@ -22,6 +22,7 @@
         <div class="inputContainer">
           <label>
             <select name="team-select" id="team-select">
+              <option value="Select a team" >Select team</option>
               {% for value in team %}
               <option value={{value.0}} >{{value.0}}</option>
               {% endfor %}
@@ -32,8 +33,9 @@
         <div class="inputContainer">
           <label>
             <select name="user-select" id="user-select">
+              <option value="Select a leader" >Select leader</option>
               {% for value in users %}
-              <option value={{value.0}} >{{value.0}}</option>
+              <option value={{value.0}} >{{value.1}}</option>
               {% endfor %}
             </select>
           </label>

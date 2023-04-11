@@ -125,8 +125,8 @@ def assign_leader(request):
             messages.info(request, 'Select a team')
             return redirect('assign-user')
         user = request.POST['user-select']
-        if user == "Select a user":
-            messages.info(request, 'Select a user')
+        if user == "Select a leader":
+            messages.info(request, 'Select a leader')
             return redirect('assign-user')
         database.updateLeader(team,user)
         return redirect('teams')
