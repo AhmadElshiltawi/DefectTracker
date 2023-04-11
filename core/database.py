@@ -540,3 +540,84 @@ def update_bug_description(bug_id, description):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def getFeatures():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT feature_id, feature_date, feature_title, project.project_id, feature_description, project_name, user.username  FROM feature, project, user WHERE feature.project_id = project.project_id AND feature.user_id == user.user_id"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Records selected successfully from feature table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+    
+def delete_feature(feature_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"DELETE from feature WHERE feature_id = (?)"
+        val = (feature_id, )
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Deleted bug id: " + str(feature_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_feature_title(feature_id, title):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE feature SET feature_title=(?) WHERE feature_id=(?)"
+        val = (title, feature_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update feature id: " + str(feature_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_feature_description(feature_id, description):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE feature SET feature_description=(?) WHERE feature_id=(?)"
+        val = (description, feature_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update feature id: " + str(feature_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
