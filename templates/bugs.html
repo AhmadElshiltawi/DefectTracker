@@ -129,8 +129,8 @@
               <tbody>
                 {% for bug in con %}
                 <tr>
-                  <td><button>CREATE TICKET</button></td>
                   {% if bug.6 == request.session.username %}
+                  <td><button>CREATE TICKET</button></td>
                   <td>
                     <label class="switch">
                       <input
@@ -142,6 +142,9 @@
                     </label>
                   </td>
                   {% else %}
+                  <td>
+                    <button disabled>CREATE TICKET</button>
+                  </td>
                   <td>
                     <label class="switch">
                       <input
@@ -202,7 +205,17 @@
                     </label>
                   </td>
                   {% endif %}
-                  <td>{{bug.6}}</td>
+                  <td>
+                    <label>
+                      <input
+                        name="id-{{forloop.counter}}"
+                        type="hidden"
+                        class="input"
+                        value="{{bug.0}}"
+                      />
+                    </label>
+                    {{bug.6}}
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
