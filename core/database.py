@@ -409,3 +409,24 @@ def getTeams():
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+
+
+def updateLeader(team, user):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_update_query = "UPDATE team SET leader_id = ? WHERE team_no = ?"
+        val = (user, team)
+        cursor.execute(sqlite_update_query, val)
+        sqliteConnection.commit()
+        cursor.fetchall()
+        print("Record updated successfully from SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")

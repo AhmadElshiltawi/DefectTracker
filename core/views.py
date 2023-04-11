@@ -119,8 +119,18 @@ def signin(request):
 def assign_leader(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'assign-leader.html')
+    if request.method == "POST":
+        team = request.POST['team-select']
+        if team == "Select a team":
+            messages.info(request, 'Select a team')
+            return redirect('assign-user')
+        user = request.POST['user-select']
+        if user == "Select a user":
+            messages.info(request, 'Select a user')
+            return redirect('assign-user')
+        database.updateLeader(team,user)
+    con = {"team":database.getTeams(), "users":database.getCollaborators()}
+    return render(request, 'assign-leader.html',con)
 
 def assign_user(request):
     if not request.session.has_key('username'):
@@ -143,8 +153,10 @@ def assign_user(request):
 def assign_team(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'assign-team.html')
+    # if request.method == "POST":
+
+    con = {"team":database.getTeams(), "projects":database.getProjects()}
+    return render(request, 'assign-team.html',con)
 
 def bugs(request):
     if not request.session.has_key('username'):
