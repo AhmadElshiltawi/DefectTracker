@@ -243,7 +243,7 @@ def getProjectPage():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT project_id, project_name, start_date, status, description, admin_id FROM project"
+        sqlite_select_query = "SELECT project.project_id, project.project_name, project.start_date, project.status, project.description, user.username FROM project, user WHERE project.admin_id = user.admin_id"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         for row in cursor.fetchall():
