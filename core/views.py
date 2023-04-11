@@ -171,16 +171,51 @@ def assign_team(request):
     return render(request, 'assign-team.html',con)
 
 def bugs(request):
+    bugs = database.getBugs()
+    con = {"con":bugs} 
+
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'bugs.html')
+
+    if request.method == "POST":
+        print(request.POST)
+        for i in range(1, len(bugs) + 1):
+            if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                database.delete_bug(int(request.POST[f"id-{i}"]))
+
+            else:
+                if f"title-{i}" in request.POST and request.POST[f"title-{i}"] != '':
+                    database.update_bug_title(int(request.POST[f"id-{i}"]), request.POST[f"title-{i}"])
+
+                if f"description-{i}" in request.POST and request.POST[f"description-{i}"] != '':
+                    database.update_bug_description(int(request.POST[f"id-{i}"]), request.POST[f"description-{i}"])
+        return redirect('bugs')
+                
+    return render(request, 'bugs.html', con)
 
 def features(request):
+    features = database.getFeatures()
+    con = {"con":features} 
+
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'features.html')
+
+    if request.method == "POST":
+        print(request.POST)
+        for i in range(1, len(features) + 1):
+            if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                database.delete_feature(int(request.POST[f"id-{i}"]))
+
+            else:
+                if f"title-{i}" in request.POST and request.POST[f"title-{i}"] != '':
+                    database.update_feature_title(int(request.POST[f"id-{i}"]), request.POST[f"title-{i}"])
+
+                if f"description-{i}" in request.POST and request.POST[f"description-{i}"] != '':
+                    database.update_feature_description(int(request.POST[f"id-{i}"]), request.POST[f"description-{i}"])
+        return redirect('features')
+                
+    return render(request, 'features.html', con)
+
 
 def create_bug(request):
     if not request.session.has_key('username'):
