@@ -149,15 +149,19 @@ def features(request):
 def create_bug(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    
+
     if request.method == "POST":
         project = request.POST['project-select']
+        if project == "Choose a project":
+            messages.info(request, 'No project selected! Try again')
+            return redirect('create-bug')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_bug(date, title, description, project, 'b')
         return redirect('index')
-    return render(request, 'create-bug.html')
+    con = {"con":database.getProjects()}
+    return render(request, 'create-bug.html',con)
 
 def create_feature(request):
     if not request.session.has_key('username'):
@@ -165,12 +169,16 @@ def create_feature(request):
     
     if request.method == "POST":
         project = request.POST['project-select']
+        if project == "Choose a project":
+            messages.info(request, 'No project selected! Try again')
+            return redirect('create-feature')
         title = request.POST['title']
         description = request.POST['description']
         date = timezone.now().strftime("%Y-%m-%d")
         database.add_featureRequest(date, title, description, project, 'b')
         return redirect('index')
-    return render(request, 'create-feature.html')
+    con = {"con":database.getProjects()}
+    return render(request, 'create-feature.html',con)
 
 def create_project(request):
     if not request.session.has_key('username'):
