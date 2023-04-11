@@ -171,10 +171,14 @@ def assign_team(request):
     return render(request, 'assign-team.html',con)
 
 def bugs(request):
+    if request.method == "POST":
+        print(request.POST)
+    
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'bugs.html')
+    
+    con = {"con":database.getBugs()}
+    return render(request, 'bugs.html', con)
 
 def features(request):
     if not request.session.has_key('username'):
