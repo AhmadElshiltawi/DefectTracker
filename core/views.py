@@ -155,9 +155,19 @@ def assign_user(request):
 def assign_team(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    # if request.method == "POST":
-
-    con = {"team":database.getTeams(), "projects":database.getProjects()}
+    if request.method == "POST":
+        team = request.POST['team-select']
+        if team == "Select a team":
+            messages.info(request, 'Select a team')
+            return redirect('assign-team')
+        project = request.POST['project-select']
+        if project == "Select a project":
+            messages.info(request, 'Select a project')
+            return redirect('assign-team')
+        username = request.session['username']
+        ID = database.select_userID(username=username)[0][0]
+        database.assignTeam(team, ID, project)
+    con = {"team":database.getTeams(), "project":database.getProjects()}
     return render(request, 'assign-team.html',con)
 
 def bugs(request):

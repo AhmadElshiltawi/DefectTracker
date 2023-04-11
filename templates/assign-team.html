@@ -22,10 +22,10 @@
         <div class="inputContainer">
           <label>
             <select name="team-select" id="team-select">
-              <option value="">Select a team</option>
-              <option value="12">12</option>
-              <option value="41">41</option>
-              <option value="2">2</option>
+              <option value="Select a team">Select a team</option>
+              {% for value in team %}
+              <option value={{value.0}} >{{value.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>
@@ -34,9 +34,9 @@
           <label>
             <select name="project-select" id="project-select">
               <option value="">Select a project</option>
-              <option value="ProjectX">ProjectX</option>
-              <option value="ProjectY">ProjectY</option>
-              <option value="ProjectZ">ProjectZ</option>
+              {% for value in project %}
+              <option value={{value.0}} >{{value.0}}</option>
+              {% endfor %}
             </select>
           </label>
         </div>

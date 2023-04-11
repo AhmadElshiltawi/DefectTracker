@@ -434,6 +434,27 @@ def updateLeader(team, user):
         cursor.close()
 
     except sqlite3.Error as error:
+        print("Failed to update data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+
+def assignTeam(team, ID, project):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = "INSERT into assigns (team_no, admin_id, project_id) values (?, ?, ?)"
+        val = (team, ID, project)
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        cursor.fetchall()
+        print("Record inserted successfully from SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
         print("Failed to insert data into sqlite table", error)
     finally:
         if sqliteConnection:
