@@ -354,7 +354,7 @@ def getBugs():
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
-        print("Records selected successfully from Bugs table ", len(cursor.fetchall()))
+        print("Records selected successfully from Bugs table ", value)
         cursor.close()
 
     except sqlite3.Error as error:
