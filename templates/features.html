@@ -130,7 +130,16 @@
                 {% for feature in con %}
                 <tr>
                   {% if feature.6 == request.session.username %}
-                  <td><button>CREATE TICKET</button></td>
+                  <td>
+                    <button
+                      type="submit"
+                      form="table-form"
+                      value="{{feature.0}}"
+                      name="create-ticket-{{forloop.counter}}"
+                    >
+                      CREATE TICKET
+                    </button>
+                  </td>
                   <td>
                     <label class="switch">
                       <input
