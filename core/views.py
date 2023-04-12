@@ -111,10 +111,10 @@ def signin(request):
             request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
             request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
             if database.checkdata(user_id, "admin", "admin_id"):
-                messages.info(request, 'Admin login')
+                messages.info(request, "You're logged in as Admin!")
                 request.session['admin'] = "True"
             else:
-                messages.info(request, 'Collaborator login')
+                messages.info(request, "You're logged in as a collaborator!")
                 request.session['admin'] = "False"
             return redirect('index')
         else:
@@ -364,3 +364,63 @@ def create_team(request):
         return redirect('teams')
     con = {"con": database.getCollaborators()}
     return render(request, 'create-team.html',con)
+
+def signup_admin(request):
+    if request.method == "POST":
+        email_address = request.POST['email']
+        username = request.POST['username']
+
+        first_name = request.POST['firstname']
+        last_name = request.POST['lastname']
+
+        password = request.POST['password']
+        confirm_password = request.POST['confirm-password']
+
+        email_valid = backend.validate_email(email_address)
+
+        if not email_valid:
+            messages.info(request, 'Email address is not valid!')
+            return redirect('signup-admin')
+
+        username_valid = backend.validate_username(username)
+
+        if not username_valid:
+            messages.info(request, 'Username is not valid!')
+            return redirect('signup-admin')
+
+        password_valid = backend.validate_password(password)
+
+        # Regex used:
+        # Minimum 8 letters, at least one capitalized letter, at least one lowercase letter, at least one digit
+        if not password_valid:
+            messages.info(request, 'Your password is too weak!')
+            return redirect('signup-admin')
+
+        if password != confirm_password:
+            messages.info(request, "Passwords don't match!")
+            return redirect('signup-admin')
+
+        if first_name == "":
+            messages.info(request, "The first name cannot be left blank!")
+            return redirect('signup-admin')
+
+        if last_name == "":
+            messages.info(request, "The last name cannot be left blank!")
+            return redirect('signup-admin')
+
+        # Check if email exists
+        if database.checkdata(email_address,"user", "email"):
+            messages.info(request, 'Email is already taken!')
+            return redirect('signup-admin')
+
+        # Check if the username exists
+        elif database.checkdata(username,"user", "username"):
+            messages.info(request, 'Username is already taken!')
+            return redirect('signup-admin')
+        
+        database.insert_admin(first_name, last_name, username, password, email_address)
+
+        return redirect('bugs')
+
+    else:
+        return render(request, 'signup-admin.html')

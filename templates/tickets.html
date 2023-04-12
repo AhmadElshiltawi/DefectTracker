@@ -81,6 +81,14 @@
                 <span class="item">Sign out</span>
               </a>
             </li>
+            {% if request.session.admin == "True" %}
+            <li>
+              <a href="{% url 'signup-admin' %}" class="menu-item">
+                <span class="icon"><i class="fa-solid fa-lock"></i></span>
+                <span class="item">Admin signup</span>
+              </a>
+            </li>
+            {% endif %}
           </ul>
         </div>
 

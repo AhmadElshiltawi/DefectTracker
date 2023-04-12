@@ -850,3 +850,39 @@ def check_if_feature_ticket_exists(feature_id):
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return count == 0
+
+def insert_admin(first_name, last_name, username, password, email):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM user WHERE user_id = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0,999999999)
+                data = cursor.execute("SELECT * FROM user WHERE user_id = ?", (id,))
+
+        sqlite_insert_query = """INSERT INTO user
+                            (user_id, first_name, last_name, email, username, password) 
+                            VALUES 
+                            (?, ?, ?, ?, ?, ?)"""
+        val = (id,first_name,last_name, email,username.lower(), password)
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Record inserted successfully into User table ", cursor.rowcount)
+        sqlite_insert_query = "INSERT INTO admin(no_projects, admin_id) VALUES (?, ?)"
+        val  = (0, id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
