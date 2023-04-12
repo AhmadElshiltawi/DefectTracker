@@ -105,10 +105,17 @@ def signin(request):
         password = request.POST['password']
 
         if database.checkuser(username, password):
+            user_id = database.select_userID(username=username)[0][0]
             request.session['username'] = username
-            request.session['user_id'] = database.select_userID(username=username)[0][0]
+            request.session['user_id'] = user_id
             request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
             request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
+            if database.checkdata(user_id, "admin", "admin_id"):
+                messages.info(request, 'Admin login')
+                request.session['admin'] = "True"
+            else:
+                messages.info(request, 'Collaborator login')
+                request.session['admin'] = "False"
             return redirect('index')
         else:
             messages.info(request, "Invalid username or password!")
@@ -341,6 +348,7 @@ def logout(request):
         del request.session['username']
         del request.session['first_name']
         del request.session['last_name']
+        del request.session['admin']
     except KeyError:
         pass
     return redirect('signin')
