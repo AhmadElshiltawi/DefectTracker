@@ -110,44 +110,139 @@
             <form action="{% url 'create-project' %}">
               <button>Create a project</button>
             </form>
-            <button>Save</button>
+            <button type="submit" form="table-form">Save</button>
           </div>
         </div>
-        <div class="table-wrapper">
-          <table class="fl-table">
-            <thead>
-              <tr>
-                <th>Delete</th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Start date</th>
-                <th>Status</th>
-                <th>Description</th>
-                <th>Supervisor</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">12345678</td>
-                <td contenteditable="true">Project X</td>
-                <td contenteditable="true">29/3/2024</td>
-                <td contenteditable="true">Maintenance</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-                <td>Ahmad</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form action="" method="POST" id="table-form">
+          {% csrf_token %}
+          <div class="table-wrapper">
+            <table class="fl-table">
+              <thead>
+                <tr>
+                  <th>Delete</th>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Start date</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                  <th>Supervisor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for project in con %}
+                  <tr>
+                    {% if request.session.admin == "True" %}
+                    <td>
+                      <label class="switch">
+                        <input
+                          name="delete-request-{{forloop.counter}}"
+                          type="checkbox"
+                          class="input"
+                          placeholder="Username"
+                        />
+                      </label>
+                    </td>
+                    {% else %}
+                    <td>
+                      <label class="switch">
+                        <input
+                          name="delete-request-{{forloop.counter}}"
+                          type="checkbox"
+                          class="input"
+                          placeholder="Username"
+                          disabled
+                        />
+                      </label>
+                    </td>
+                    {% endif %}
+                    <td>{{project.0}}</td>
+                    {% if request.session.admin == "True" %}
+                    <td>
+                      <label>
+                        <input
+                          name="title-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.1}}"
+                        />
+                      </label>
+                    </td>            
+                    {% else %}
+                    <td>
+                      <label>
+                        <input
+                          name="title-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.1}}"
+                          disabled
+                        />
+                      </label>
+                    </td>
+                    {% endif %}
+                    <td>{{project.2}}</td>
+                    {% if request.session.admin == "True" %}
+                    <td>
+                      <label>
+                        <input
+                          name="status-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.3}}"
+                        />
+                      </label>
+                    </td>
+                    <td>
+                      <label>
+                        <input
+                          name="description-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.4}}"
+                        />
+                      </label>
+                    </td>
+                    {% else %}
+                    <td>
+                      <label>
+                        <input
+                          name="status-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.3}}"
+                          disabled
+                        />
+                      </label>
+                    </td>
+                    <td>
+                      <label>
+                        <input
+                          name="description-{{forloop.counter}}"
+                          type="text"
+                          class="input"
+                          placeholder="{{project.4}}"
+                          disabled
+                        />
+                      </label>
+                    </td>
+                    {% endif %}
+                    <td>
+                      <label>
+                        <input
+                          name="id-{{forloop.counter}}"
+                          type="hidden"
+                          class="input"
+                          value="{{project.0}}"
+                        />
+                      </label>
+                      {{project.5}}
+                    </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </form>  
       </div>
     </div>
   </body>

@@ -105,10 +105,17 @@ def signin(request):
         password = request.POST['password']
 
         if database.checkuser(username, password):
+            user_id = database.select_userID(username=username)[0][0]
             request.session['username'] = username
-            request.session['user_id'] = database.select_userID(username=username)[0][0]
+            request.session['user_id'] = user_id
             request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
             request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
+            if database.checkdata(user_id, "admin", "admin_id"):
+                messages.info(request, 'Admin login')
+                request.session['admin'] = "True"
+            else:
+                messages.info(request, 'Collaborator login')
+                request.session['admin'] = "False"
             return redirect('index')
         else:
             messages.info(request, "Invalid username or password!")
@@ -277,6 +284,10 @@ def create_project(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not create project')
+        return redirect('project')
+    
     if request.method == "POST":
         name = request.POST['title']
         description = request.POST['description']
@@ -327,8 +338,32 @@ def reports(request):
 def projects(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'projects.html')
+    
+    projects = database.getProjectPage()
+    con = {"con":projects} 
+
+    if request.method == "POST":
+        print(request.POST)
+        for i in range(1, len(projects) + 1):
+
+            if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                print(i)
+                database.delete_project(int(request.POST[f"id-{i}"]))
+
+            else:
+                if f"title-{i}" in request.POST and request.POST[f"title-{i}"] != '':
+                    database.update_project_name(int(request.POST[f"id-{i}"]), request.POST[f"title-{i}"])
+
+                if f"status-{i}" in request.POST and request.POST[f"status-{i}"] != '':
+                    database.update_project_status(int(request.POST[f"id-{i}"]), request.POST[f"status-{i}"])
+
+                if f"description-{i}" in request.POST and request.POST[f"description-{i}"] != '':
+                    database.update_project_description(int(request.POST[f"id-{i}"]), request.POST[f"description-{i}"])
+
+        return redirect('bugs')
+    
+    
+    return render(request, 'projects.html', con)
 
 def teams(request):
     if not request.session.has_key('username'):
