@@ -1020,3 +1020,106 @@ def update_team_no_works_on(ticket_no, team_no):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def getProjectPage():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT project.project_id, project.project_name, project.start_date, project.status, project.description, user.username FROM project, user WHERE project.admin_id = user.user_id"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        for row in cursor.fetchall():
+            value.append(row)
+        print("Record selected successfully from SqliteDb_developers table ", value)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+    
+
+def delete_project(project_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"DELETE from project WHERE project_id = (?)"
+        val = (project_id, )
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Deleted project id: " + str(project_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_project_name(project_id, title):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE project SET project_name=(?) WHERE project_id=(?)"
+        val = (title, project_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update bug id: " + str(project_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_project_status(project_id, status):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE project SET status=(?) WHERE project_id=(?)"
+        val = (status, project_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update bug id: " + str(project_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_project_description(project_id, description):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE project SET description=(?) WHERE project_id=(?)"
+        val = (description, project_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update bug id: " + str(project_id))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
