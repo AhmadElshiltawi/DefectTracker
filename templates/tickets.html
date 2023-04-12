@@ -112,37 +112,88 @@
         <div class="header">
           <h1>Tickets</h1>
           <div class="buttons">
-            <button>Save</button>
+            <button type="submit" form="table-form">Save</button>
           </div>
         </div>
-        <div class="table-wrapper">
-          <table class="fl-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Ticket number</th>
-                <th>Author</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Priority</th>
-                <th>ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for ticket in con %}
-              <tr>
-                <td contenteditable="true"><button>CLOSE TiCKET</button></td>
-                <td>{{ticket.0}}</td>
-                <td contenteditable="true">{{ticket.1}}</td>
-                <td contenteditable="true">{{ticket.2}}</td>
-                <td contenteditable="true">{{ticket.3}}</td>
-                <td contenteditable="true">{{ticket.4}}</td>
-                <td contenteditable="true">{{ticket.6}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+        <form action="" method="POST" id="table-form">
+          {% csrf_token %}
+          <div class="table-wrapper">
+            <table class="fl-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Ticket number</th>
+                  <th>Author</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Issue ID</th>
+                  <th>Assigned team</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ticket in con %}
+                <tr>
+                  <td>
+                    <button
+                      type="submit"
+                      form="table-form"
+                      value="{{ticket.0}}"
+                      name="close-ticket-{{forloop.counter}}"
+                    >
+                      CLOSE TICKET
+                    </button>
+                  </td>
+                  <td>
+                    <label>
+                      <input
+                        name="ticket-no-{{forloop.counter}}"
+                        type="hidden"
+                        class="input"
+                        value="{{ticket.0}}"
+                      />
+                    </label>
+                    {{ticket.0}}
+                  </td>
+                  <td>{{ticket.1}}</td>
+                  <td>{{ticket.2}}</td>
+                  <td>
+                    <label>
+                      <input
+                        name="status-{{forloop.counter}}"
+                        type="text"
+                        class="input"
+                        placeholder="{{ticket.3}}"
+                      />
+                    </label>
+                  </td>
+                  <td>
+                    <label>
+                      <input
+                        name="priority-{{forloop.counter}}"
+                        type="text"
+                        class="input"
+                        placeholder="{{ticket.4}}"
+                      />
+                    </label>
+                  </td>
+                  <td>{{ticket.6}}</td>
+                  <td>
+                    <label>
+                      <input
+                        name="team-{{forloop.counter}}"
+                        type="text"
+                        class="input"
+                        placeholder="{{ticket.7}}"
+                      />
+                    </label>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </form>
       </div>
     </div>
   </body>

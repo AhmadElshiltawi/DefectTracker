@@ -186,7 +186,6 @@ def bugs(request):
         return redirect('signin')
 
     if request.method == "POST":
-        print(request.POST)
         for i in range(1, len(bugs) + 1):
 
             if f"create-ticket-{i}" in request.POST:
@@ -317,11 +316,33 @@ def create_report(request):
     return render(request, 'create-report.html',con)
 
 def tickets(request):
+    tickets = database.getTickets()
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.method == "POST":
+        for i in range(1, len(tickets) + 1):
+
+            if f"close-ticket-{i}" in request.POST:
+                database.delete_ticket(int(request.POST[f"ticket-no-{i}"]))
+
+            else:
+
+                if f"status-{i}" in request.POST and request.POST[f"status-{i}"] != '':
+                    database.update_ticket_status(int(request.POST[f"ticket-no-{i}"]), request.POST[f"status-{i}"])
+
+                if f"priority-{i}" in request.POST and request.POST[f"priority-{i}"] != '':
+                    database.update_ticket_priority(int(request.POST[f"ticket-no-{i}"]), request.POST[f"priority-{i}"])
+                
+                if f"team-{i}" in request.POST and request.POST[f"team-{i}"] != '':
+                    if database.check_if_team_not_exist(int(request.POST[f"team-{i}"])) is True:
+                        messages.info(request, "Chosen team number does not exist!")
+                        return redirect('tickets')
+                    
+                    database.update_team_no_works_on(int(request.POST[f"ticket-no-{i}"]), int(request.POST[f"team-{i}"]))
+        return redirect('tickets')
     
-    print(database.getTickets())
-    con = {"con":database.getTickets()}
+    con = {"con": tickets}
 
     return render(request, 'tickets.html', con)
 

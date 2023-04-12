@@ -269,13 +269,13 @@ def getTickets():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = """SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, bug_id
-                                FROM ticket, bug_ticket
-                                WHERE ticket.ticket_no = bug_ticket.ticket_no
+        sqlite_select_query = """SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, bug_id, team_no
+                                FROM ticket, bug_ticket, works_on
+                                WHERE ticket.ticket_no = bug_ticket.ticket_no AND works_on.ticket_no = ticket.ticket_no
                                 UNION
-                                SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, feature_id
-                                FROM ticket, feature_ticket
-                                WHERE ticket.ticket_no = feature_ticket.ticket_no
+                                SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, feature_id, team_no
+                                FROM ticket, feature_ticket, works_on
+                                WHERE ticket.ticket_no = feature_ticket.ticket_no AND works_on.ticket_no = ticket.ticket_no
                                 """
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
@@ -715,6 +715,19 @@ def create_bug_ticket(bug_id, author, status, priority, project_id, admin_id):
         count = cursor.execute(sqlite_insert_query, val)
 
         sqliteConnection.commit()
+
+        sqlite_insert_query = """INSERT INTO works_on
+                                    (team_no, ticket_no) 
+                                    VALUES 
+                                    (?, ?)"""
+
+        val = (None, id)
+
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
         cursor.close()
 
     except sqlite3.Error as error:
@@ -726,7 +739,7 @@ def create_bug_ticket(bug_id, author, status, priority, project_id, admin_id):
 
 def create_ticket_from_bug(bug_id, admin_id):
     bug = getBug(bug_id)
-    create_bug_ticket(bug_id, bug[0][1], "in progress", " ", bug[0][0], admin_id)
+    create_bug_ticket(bug_id, bug[0][1], "None", "None", bug[0][0], admin_id)
 
 def check_if_bug_ticket_exists(bug_id):
     count = -1
@@ -812,6 +825,20 @@ def create_feature_ticket(feature_id, author, status, priority, project_id, admi
         count = cursor.execute(sqlite_insert_query, val)
 
         sqliteConnection.commit()
+
+        sqlite_insert_query = """INSERT INTO works_on
+                                    (team_no, ticket_no) 
+                                    VALUES 
+                                    (?, ?)"""
+
+        val = (None, id)
+
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
+
         cursor.close()
 
     except sqlite3.Error as error:
@@ -823,7 +850,7 @@ def create_feature_ticket(feature_id, author, status, priority, project_id, admi
 
 def create_ticket_from_feature(feature_id, admin_id):
     feature = getFeature(feature_id)
-    create_feature_ticket(feature_id, feature[0][1], "in progress", " ", feature[0][0], admin_id)
+    create_feature_ticket(feature_id, feature[0][1], "None", "None", feature[0][0], admin_id)
 
 def check_if_feature_ticket_exists(feature_id):
     count = -1
@@ -882,6 +909,113 @@ def insert_admin(first_name, last_name, username, password, email):
 
     except sqlite3.Error as error:
         print("Failed to insert data into User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+
+def update_ticket_priority(ticket_no, priority):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE ticket SET priority=(?) WHERE ticket_no=(?)"
+        val = (priority, ticket_no)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update ticket no: " + str(ticket_no))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def update_ticket_status(ticket_no, status):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE ticket SET status=(?) WHERE ticket_no=(?)"
+        val = (status, ticket_no)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update ticket no: " + str(ticket_no))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to update data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def delete_ticket(ticket_no):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"DELETE from ticket WHERE ticket_no = (?)"
+        val = (ticket_no, )
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Deleted ticket id: " + str(ticket_no))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def check_if_team_not_exist(team_no):
+    count = -1
+
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT * FROM team WHERE team_no = (?)"
+        val = (team_no, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        count = len(value)
+        print(value)
+
+        cursor.close()
+
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return count == 0
+    
+def update_team_no_works_on(ticket_no, team_no):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_insert_query = f"UPDATE works_on SET team_no=(?) WHERE ticket_no=(?)"
+        val = (team_no, ticket_no)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+        print("Update ticket no: " + str(ticket_no))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
