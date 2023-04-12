@@ -621,3 +621,25 @@ def update_feature_description(feature_id, description):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def getUserTickets(user):
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "Select ticket_no FROM works_in, works_on WHERE collaborator_id  = ? AND works_in.team_no = works_on.team_no"
+        val = (user,)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value

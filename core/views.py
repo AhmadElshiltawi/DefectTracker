@@ -286,7 +286,9 @@ def create_report(request):
         date = timezone.now().strftime("%Y-%m-%d")
         database.create_report(ticket, contents, date)
         return redirect('reports')
-    con = {"con":database.getTickets()}
+    username = request.session['username']
+    ID = database.select_userID(username=username)[0][0]
+    con = {"con":database.getUserTickets(ID)}
     return render(request, 'create-report.html',con)
 
 def tickets(request):
