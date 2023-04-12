@@ -117,17 +117,21 @@
                 <th>Date</th>
                 <th>Status</th>
                 <th>Priority</th>
+                <th>ID</th>
               </tr>
             </thead>
             <tbody>
+              {% for ticket in con %}
               <tr>
                 <td contenteditable="true"><button>CLOSE TiCKET</button></td>
-                <td>12345678</td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">29/3/2024</td>
-                <td contenteditable="true">In progress</td>
-                <td contenteditable="true">Very important</td>
+                <td>{{ticket.0}}</td>
+                <td contenteditable="true">{{ticket.1}}</td>
+                <td contenteditable="true">{{ticket.2}}</td>
+                <td contenteditable="true">{{ticket.3}}</td>
+                <td contenteditable="true">{{ticket.4}}</td>
+                <td contenteditable="true">{{ticket.6}}</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>

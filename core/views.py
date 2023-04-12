@@ -106,6 +106,7 @@ def signin(request):
 
         if database.checkuser(username, password):
             request.session['username'] = username
+            request.session['user_id'] = database.select_userID(username=username)[0][0]
             request.session['first_name'] = database.select_user_first_name(username=username)[0][0]
             request.session['last_name'] = database.select_user_last_name(username=username)[0][0]
             return redirect('index')
@@ -180,6 +181,15 @@ def bugs(request):
     if request.method == "POST":
         print(request.POST)
         for i in range(1, len(bugs) + 1):
+
+            if f"create-ticket-{i}" in request.POST:
+                if database.check_if_bug_ticket_exists(int(request.POST[f"create-ticket-{i}"])) is False:
+                    messages.info(request, "Something went wrong! Please check if the ticket already exists.")
+                    return redirect('bugs')
+                
+                database.create_ticket_from_bug(int(request.POST[f"create-ticket-{i}"]), int(request.session['user_id']))
+                return redirect('tickets')
+
             if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
                 database.delete_bug(int(request.POST[f"id-{i}"]))
 
@@ -189,6 +199,7 @@ def bugs(request):
 
                 if f"description-{i}" in request.POST and request.POST[f"description-{i}"] != '':
                     database.update_bug_description(int(request.POST[f"id-{i}"]), request.POST[f"description-{i}"])
+
         return redirect('bugs')
                 
     return render(request, 'bugs.html', con)
@@ -201,8 +212,15 @@ def features(request):
         return redirect('signin')
 
     if request.method == "POST":
-        print(request.POST)
         for i in range(1, len(features) + 1):
+            if f"create-ticket-{i}" in request.POST:
+                if database.check_if_feature_ticket_exists(int(request.POST[f"create-ticket-{i}"])) is False:
+                    messages.info(request, "Something went wrong! Please check if the ticket already exists.")
+                    return redirect('features')
+                
+                database.create_ticket_from_feature(int(request.POST[f"create-ticket-{i}"]), int(request.session['user_id']))
+                return redirect('tickets')
+            
             if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
                 database.delete_feature(int(request.POST[f"id-{i}"]))
 
@@ -295,7 +313,10 @@ def tickets(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
-    return render(request, 'tickets.html')
+    print(database.getTickets())
+    con = {"con":database.getTickets()}
+
+    return render(request, 'tickets.html', con)
 
 def reports(request):
     if not request.session.has_key('username'):

@@ -264,7 +264,14 @@ def getTickets():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT ticket_no FROM ticket"
+        sqlite_select_query = """SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, bug_id
+                                FROM ticket, bug_ticket
+                                WHERE ticket.ticket_no = bug_ticket.ticket_no
+                                UNION
+                                SELECT ticket.ticket_no, author, ticket_date, status, priority, project_id, feature_id
+                                FROM ticket, feature_ticket
+                                WHERE ticket.ticket_no = feature_ticket.ticket_no
+                                """
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         value = cursor.fetchall()
@@ -643,3 +650,198 @@ def getUserTickets(user):
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+
+
+def getBug(bug_id):
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT project.project_id, user.username  FROM bug, project, user WHERE bug.project_id = project.project_id AND bug.user_id == user.user_id AND bug.bug_id = (?)"
+        val = (bug_id, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Records selected successfully from Bugs table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+
+def create_bug_ticket(bug_id, author, status, priority, project_id, admin_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM ticket WHERE ticket_no = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0, 999999999)
+                data = cursor.execute("SELECT * FROM ticket WHERE ticket_no = ?", (id,))
+        sqlite_insert_query = """INSERT INTO ticket
+                                    (ticket_no, author, ticket_date, status, priority, project_id, admin_id) 
+                                    VALUES 
+                                    (?, ?, DATE(), ?, ?, ?, ?)"""
+        val = (id, author, status, priority, project_id, admin_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
+
+        sqlite_insert_query = """INSERT INTO bug_ticket
+                                    (ticket_no, bug_id) 
+                                    VALUES 
+                                    (?, ?)"""
+
+        val = (id, bug_id)
+
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into Ticket table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def create_ticket_from_bug(bug_id, admin_id):
+    bug = getBug(bug_id)
+    create_bug_ticket(bug_id, bug[0][1], "in progress", " ", bug[0][0], admin_id)
+
+def check_if_bug_ticket_exists(bug_id):
+    count = -1
+
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT * FROM bug_ticket WHERE bug_id = (?)"
+        val = (bug_id, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        count = len(value)
+        print(value)
+
+        cursor.close()
+
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return count == 0
+
+def getFeature(feature_id):
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT project.project_id, user.username  FROM feature, project, user WHERE feature.project_id = project.project_id AND feature.user_id == user.user_id AND feature.feature_id = (?)"
+        val = (feature_id, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Records selected successfully from features table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+
+def create_feature_ticket(feature_id, author, status, priority, project_id, admin_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        id = random.randint(0,999999999)
+        data = cursor.execute("SELECT * FROM ticket WHERE ticket_no = ?", (id,))
+        while True:
+            if len(cursor.fetchall()) == 0:
+                break
+            else:
+                id = random.randint(0, 999999999)
+                data = cursor.execute("SELECT * FROM ticket WHERE ticket_no = ?", (id,))
+        sqlite_insert_query = """INSERT INTO ticket
+                                    (ticket_no, author, ticket_date, status, priority, project_id, admin_id) 
+                                    VALUES 
+                                    (?, ?, DATE(), ?, ?, ?, ?)"""
+        val = (id, author, status, priority, project_id, admin_id)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
+
+        sqlite_insert_query = """INSERT INTO feature_ticket
+                                    (ticket_no, feature_id) 
+                                    VALUES 
+                                    (?, ?)"""
+
+        val = (id, feature_id)
+
+        cursor.execute("PRAGMA foreign_keys = ON;")
+
+        count = cursor.execute(sqlite_insert_query, val)
+
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into Ticket table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def create_ticket_from_feature(feature_id, admin_id):
+    feature = getFeature(feature_id)
+    create_feature_ticket(feature_id, feature[0][1], "in progress", " ", feature[0][0], admin_id)
+
+def check_if_feature_ticket_exists(feature_id):
+    count = -1
+
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT * FROM feature_ticket WHERE feature_id = (?)"
+        val = (feature_id, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        count = len(value)
+        print(value)
+
+        cursor.close()
+
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return count == 0
