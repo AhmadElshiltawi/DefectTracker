@@ -137,7 +137,7 @@
               <tbody>
                 {% for feature in con %}
                 <tr>
-                  {% if feature.6 == request.session.username %}
+                  {% if request.session.admin == "True" %}
                   <td>
                     <button
                       type="submit"

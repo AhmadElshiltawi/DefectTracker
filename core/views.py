@@ -127,6 +127,11 @@ def signin(request):
 def assign_leader(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not update leader')
+        return redirect('teams')
+    
     if request.method == "POST":
         team = request.POST['team-select']
         if team == "Select a team":
@@ -144,6 +149,11 @@ def assign_leader(request):
 def assign_user(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not assign user')
+        return redirect('teams')
+
     if request.method == "POST":
         team = request.POST['team-select']
         if team == "Select a team":
@@ -163,6 +173,11 @@ def assign_user(request):
 def assign_team(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not assign team')
+        return redirect('projects')
+
     if request.method == "POST":
         team = request.POST['team-select']
         if team == "Select a team":
@@ -283,6 +298,9 @@ def create_feature(request):
 def create_project(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not create project')
+        return redirect('projects')
     
     if request.method == "POST":
         name = request.POST['title']
@@ -355,6 +373,13 @@ def logout(request):
 
 
 def create_team(request):
+    if not request.session.has_key('username'):
+        return redirect('signin')
+
+    if request.session['admin'] == "False":
+        messages.info(request, 'Collaborator can not create team')
+        return redirect('teams')
+    
     if request.method == "POST":
         leader = request.POST['leader-select']
         if leader == "Select a leader":
