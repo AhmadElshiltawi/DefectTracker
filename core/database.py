@@ -23,6 +23,11 @@ def insert_user(first_name, last_name, username, password, email):
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
         print("Record inserted successfully into User table ", cursor.rowcount)
+        sqlite_insert_query = "INSERT INTO Collaborator(collaborator_id) VALUES (?)"
+        val  = (id,)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
         cursor.close()
 
     except sqlite3.Error as error:
