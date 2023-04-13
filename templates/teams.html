@@ -111,6 +111,7 @@
         {% endfor %}
         <div class="header">
           <h1>Teams</h1>
+          {% if request.session.admin == "True" %}
           <div class="buttons">
             <form action="{% url 'assign-leader' %}">
               <button>Update leader</button>
@@ -121,15 +122,18 @@
             <form action="{% url 'assign-user' %}">
               <button>Assign a user</button>
             </form>
-
-            <button>Save</button>
+            <button type="submit" form="table-form">Save</button>
           </div>
         </div>
-        <div class="table-wrapper">
-          <h3>Team 19 - Assigned: None</h3>
+        {% endif %}
+        <form action="" method="POST" id="table-form">
+          {% csrf_token %}
+        {% for t in con2 %}
+          <div class="table-wrapper">
+          <h3>Team {{t.0}} - Assigned: {{t.2}}</h3>
           <table class="fl-table">
             <thead>
-              <tr>
+            <tr>
                 <th>Remove</th>
                 <th>First name</th>
                 <th>Last name</th>
@@ -137,59 +141,46 @@
                 <th>Email</th>
               </tr>
             </thead>
+        {% for team in con %}
+          {% if t.0 == team.0 %}
             <tbody>
               <tr>
+                {% if request.session.admin == "True" %}
                 <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">ahmad@gmail.com</td>
+                    <label class="switch">
+                      <input
+                        name="delete-request-{{forloop.counter}}"
+                        type="checkbox"
+                        class="input"
+                        placeholder="Username"
+                      />
+                    </label>
+                  </td>
+                  {% else %}
+                  <td>
+                    <label class="switch">
+                      <input
+                        name="delete-request-{{forloop.counter}}"
+                        type="checkbox"
+                        class="input"
+                        placeholder="Username"
+                        disabled
+                      />
+                    </label>
+                  </td>
+                  {% endif %}
+                <td contenteditable="false">{{team.1}}</td>
+                <td contenteditable="false">{{team.2}}</td>
+                <td contenteditable="false">{{team.3}}</td>
+                <td contenteditable="false">{{team.4}}</td>
+                {% endif %}
+                {% endfor %}
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="table-wrapper">
-          <h3>Team 24 - Assigned: ProjectX</h3>
-          <table class="fl-table">
-            <thead>
-              <tr>
-                <th>Remove</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Username</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">john</td>
-                <td contenteditable="true">doe</td>
-                <td contenteditable="true">john</td>
-                <td contenteditable="true">john@gmail.com</td>
-              </tr>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">jane</td>
-                <td contenteditable="true">doe</td>
-                <td contenteditable="true">jane</td>
-                <td contenteditable="true">jane@gmail.com</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        {% endfor %}
+        </form>
       </div>
     </div>
   </body>

@@ -175,6 +175,7 @@ def assign_team(request):
         username = request.session['username']
         ID = database.select_userID(username=username)[0][0]
         database.assignTeam(team, ID, project)
+        return redirect('teams')
     con = {"team":database.getTeams(), "project":database.getProjects()}
     return render(request, 'assign-team.html',con)
 
@@ -359,10 +360,17 @@ def projects(request):
     return render(request, 'projects.html')
 
 def teams(request):
+    data = database.getTeams()
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'teams.html')
+    if request.method == "POST":
+        for i in range(1, len(data) + 1):
+            if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                database.delete_team_member(int(request.POST[f"id-{i}"]))
+        return redirect('teams')
+    con = {"con":database.getTeamInfoWithProjects(), "con2":database.getAssigns(), "con3":database.getTeamInfoWithoutProjects(),
+           "con4":database.getTeams()}
+    return render(request, 'teams.html',con)
 
 def logout(request):
     try:
