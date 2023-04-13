@@ -120,8 +120,9 @@
         </div>
         <div class="table-wrapper">
           <table class="fl-table">
+            {% for ticket in con %}
             <thead>
-              <h3>Ticket: 1238434</h3>
+              <h3>Ticket: {{ticket.0}}</h3>
               <tr>
                 <th>Delete</th>
                 <th>Date</th>
@@ -129,63 +130,21 @@
               </tr>
             </thead>
             <tbody>
+              {% for report in ticket.1 %}
               <tr>
                 <td>
                   <label class="switch">
                     <input type="checkbox" />
                   </label>
                 </td>
-                <td contenteditable="true">29/3/2024</td>
+                <td>{{report.0}}</td>
                 <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
+                  {{report.1}}
                 </td>
               </tr>
+              {% endfor %}
             </tbody>
-          </table>
-        </div>
-        <div class="table-wrapper">
-          <table class="fl-table">
-            <thead>
-              <h3>Ticket: 12432321</h3>
-              <tr>
-                <th>Delete</th>
-                <th>Date</th>
-                <th style="width: 70vw">Contents</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">29/3/2022</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">31/3/2022</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-              </tr>
-            </tbody>
+            {% endfor %}
           </table>
         </div>
       </div>

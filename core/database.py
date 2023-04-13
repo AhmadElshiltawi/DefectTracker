@@ -1123,3 +1123,60 @@ def update_project_description(project_id, description):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def getReportPage():
+    element = []
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT ticket_no FROM ticket"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        tickets = cursor.fetchall()
+        print(tickets)
+
+        
+        for no in tickets:
+            tickets = []
+            tickets.append(no)
+            print(tickets)
+            sqlite_select_query = "SELECT progress_date, description FROM progress_contents WHERE ticket_no = ?"
+            cursor.execute(sqlite_select_query,(no))
+            sqliteConnection.commit()
+            for row in cursor.fetchall():
+                element.append(row)
+            tickets.append(element)
+            value.append(element)
+            print(value)
+        print("Record selected successfully from SqliteDb_developers table ", value)
+
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+
+def insert_progress_report(ticket_no):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        count = cursor.execute("INSERT INTO progress_report (ticket_no) VALUES (?)", (ticket_no,))
+        sqliteConnection.commit()
+        print("Record inserted successfully into User table ", count)
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+    

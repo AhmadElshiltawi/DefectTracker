@@ -297,7 +297,6 @@ def create_project(request):
 def create_report(request):
     if not request.session.has_key('username'):
         return redirect('signin')
-    
     if request.method == "POST":
         ticket = request.POST['ticket-select']
         if ticket == "Select a ticket":
@@ -308,10 +307,13 @@ def create_report(request):
             messages.info(request, 'Enter a description!')
             return redirect('create-report')
         date = timezone.now().strftime("%Y-%m-%d")
+        print(ticket)
         database.create_report(ticket, contents, date)
+        print("the command excute")
         return redirect('reports')
     username = request.session['username']
     ID = database.select_userID(username=username)[0][0]
+    print(ID)
     con = {"con":database.getUserTickets(ID)}
     return render(request, 'create-report.html',con)
 
@@ -340,6 +342,7 @@ def tickets(request):
                         return redirect('tickets')
                     
                     database.update_team_no_works_on(int(request.POST[f"ticket-no-{i}"]), int(request.POST[f"team-{i}"]))
+
         return redirect('tickets')
     
     con = {"con": tickets}
@@ -350,7 +353,10 @@ def reports(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
-    return render(request, 'reports.html')
+    reports = database.getReportPage()
+    con = {"con":reports} 
+    
+    return render(request, 'reports.html',con)
 
 def projects(request):
     if not request.session.has_key('username'):
