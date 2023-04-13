@@ -118,9 +118,10 @@
             <button>Save</button>
           </div>
         </div>
+
+        {% for ticket in con %}
         <div class="table-wrapper">
           <table class="fl-table">
-            {% for ticket in con %}
             <thead>
               <h3>Ticket: {{ticket.0}}</h3>
               <tr>
@@ -130,23 +131,21 @@
               </tr>
             </thead>
             <tbody>
-              {% for report in ticket.1 %}
               <tr>
                 <td>
                   <label class="switch">
                     <input type="checkbox" />
                   </label>
                 </td>
-                <td>{{report.0}}</td>
+                <td>{{ticket.1.0}}</td>
                 <td contenteditable="true">
-                  {{report.1}}
+                  {{ticket.1.1}}
                 </td>
               </tr>
-              {% endfor %}
-            </tbody>
-            {% endfor %}
+            </tbody> 
           </table>
         </div>
+        {% endfor %}
       </div>
     </div>
   </body>
