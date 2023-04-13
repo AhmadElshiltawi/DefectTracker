@@ -109,6 +109,7 @@
         {% for message in messages %}
         <div class="errorMessage">{{ message }}</div>
         {% endfor %}
+
         <div class="header">
           <h1>Teams</h1>
           <div class="buttons">
@@ -122,74 +123,66 @@
               <button>Assign a user</button>
             </form>
 
-            <button>Save</button>
+            <button type="submit" form="table-form">Save</button>
           </div>
         </div>
-        <div class="table-wrapper">
-          <h3>Team 19 - Assigned: None</h3>
-          <table class="fl-table">
-            <thead>
-              <tr>
-                <th>Remove</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Username</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">Ahmad</td>
-                <td contenteditable="true">ahmad@gmail.com</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="table-wrapper">
-          <h3>Team 24 - Assigned: ProjectX</h3>
-          <table class="fl-table">
-            <thead>
-              <tr>
-                <th>Remove</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Username</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">john</td>
-                <td contenteditable="true">doe</td>
-                <td contenteditable="true">john</td>
-                <td contenteditable="true">john@gmail.com</td>
-              </tr>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">jane</td>
-                <td contenteditable="true">doe</td>
-                <td contenteditable="true">jane</td>
-                <td contenteditable="true">jane@gmail.com</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form action="" method="POST" id="table-form">
+          {% csrf_token %}
+          <div class="table-wrapper">
+            {% for team in con %}
+            <h3>Team {{ team.0 }} - Assigned: {{ team.1 }}</h3>
+            <table class="fl-table">
+              <thead>
+                <tr>
+                  <th>Remove</th>
+                  <th>First name</th>
+                  <th>Last name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for member in con2 %} {% if member.0 == team.0 %}
+                <tr>
+                  <td>
+                    <label class="switch">
+                      <input
+                        name="delete-request-{{forloop.counter}}"
+                        type="checkbox"
+                        class="input"
+                      />
+                    </label>
+                  </td>
+                  <td>
+                    <label>
+                      <input
+                        name="team-no-{{forloop.counter}}"
+                        type="hidden"
+                        class="input"
+                        value="{{team.0}}"
+                      />
+                    </label>
+                    <label>
+                      <input
+                        name="id-{{forloop.counter}}"
+                        type="hidden"
+                        class="input"
+                        value="{{member.5}}"
+                      />
+                    </label>
+                    {{member.1}}
+                  </td>
+                  <td>{{member.2}}</td>
+                  <td>{{member.3}}</td>
+                  <td>{{member.4}}</td>
+                </tr>
+                {% endif %} {% endfor %}
+              </tbody>
+            </table>
+
+            {% endfor %}
+          </div>
+        </form>
       </div>
     </div>
   </body>

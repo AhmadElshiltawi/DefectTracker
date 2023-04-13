@@ -145,6 +145,7 @@ def assign_user(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     if request.method == "POST":
+        print(request.POST)
         team = request.POST['team-select']
         if team == "Select a team":
             messages.info(request, 'Select a team')
@@ -383,10 +384,26 @@ def projects(request):
     return render(request, 'projects.html', con)
 
 def teams(request):
+    teams = database.getTeams()
     if not request.session.has_key('username'):
         return redirect('signin')
-        
-    return render(request, 'teams.html')
+    
+
+    con = {"con":database.get_team_names_w_project(), "con2" : database.get_team_members()}
+
+    if request.method == "POST":
+        for team in teams:
+            print(team)
+            members_length = len(database.get_specific_team_members(team[0]))
+            for i in range(1, members_length + 1):
+                if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                    if database.isUserLeader(int(request.POST[f"id-{i}"]), int(request.POST[f"team-no-{i}"])) is True:
+                        messages.info(request, f"Team " + request.POST[f"team-no-{i}"] + " deleted since leader has been deleted.")
+                        database.delete_team(int(request.POST[f"team-no-{i}"]))
+                    else:
+                        database.delete_team_member(int(request.POST[f"id-{i}"]), int(request.POST[f"team-no-{i}"]))
+        return redirect('teams')
+    return render(request, 'teams.html', con)
 
 def logout(request):
     try:
@@ -402,12 +419,21 @@ def logout(request):
 def create_team(request):
     if request.method == "POST":
         leader = request.POST['leader-select']
+        project = request.POST['project-select']
+        
         if leader == "Select a leader":
             messages.info(request, 'Select a leader for the team!')
             return redirect('create-team')
-        database.createTeam(leader)
+        
+        if project == "Select a project":
+            messages.info(request, 'Select a project for the team!')
+            return redirect('create-team')
+        
+        print(leader, project,  request.session['user_id'])
+        database.createTeam(leader, project, request.session['user_id'])
+        
         return redirect('teams')
-    con = {"con": database.getCollaborators()}
+    con = {"con": database.getCollaborators(), "projects" : database.getProjects()}
     return render(request, 'create-team.html',con)
 
 def signup_admin(request):

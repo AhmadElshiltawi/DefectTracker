@@ -292,7 +292,7 @@ def getTickets():
         return value
 
 
-def createTeam(leader):
+def createTeam(leader, project, admin_id):
     try:
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
@@ -313,8 +313,19 @@ def createTeam(leader):
         cursor.execute("PRAGMA foreign_keys = ON;")
         count = cursor.execute(sqlite_insert_query, val)
         sqliteConnection.commit()
-        print("Record inserted successfully into SqliteDb_developers table ", len(cursor.fetchall()))
+
+        sqlite_insert_query = """INSERT INTO assigns
+                                    (team_no, admin_id, project_id) 
+                                    VALUES 
+                                    (?,?,?)"""
+        val = (teamNumber, admin_id, project)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        count = cursor.execute(sqlite_insert_query, val)
+        sqliteConnection.commit()
+
         cursor.close()
+
+        assignUser(teamNumber, leader)
 
     except sqlite3.Error as error:
         print("Failed to insert data into sqlite table", error)
@@ -1123,3 +1134,152 @@ def update_project_description(project_id, description):
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
+
+def get_team_names_w_project():
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT team.team_no, project_name FROM team, assigns, project WHERE team.team_no = assigns.team_no AND project.project_id = assigns.project_id")
+        teams = cursor.fetchall()
+        sqliteConnection.commit()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select data from User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return teams
+    
+def get_team_members():
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT team_no, first_name, last_name, username, email, works_in.collaborator_id FROM user, works_in WHERE user.user_id = works_in.collaborator_id"
+        cursor.execute(sqlite_select_query)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Records selected successfully from feature table ", len(cursor.fetchall()))
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value
+    
+def delete_team_member(user_id, team):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_delete_query = f"DELETE from works_in WHERE collaborator_id = (?) AND team_no = (?)"
+        val = (user_id, team)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_delete_query, val)
+        sqliteConnection.commit()
+        updateTeamNumber(team)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def updateTeamNumber(team):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "Select count(*) FROM works_in WHERE team_no = ?"
+        val = (team,)
+        count = cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        count = cursor.fetchall()[0][0]
+        sqlite_update_query = "UPDATE team SET no_people = ? WHERE team_no = ?"
+        val = (count, team)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_update_query, val)
+        sqliteConnection.commit()
+        cursor.fetchall()
+        print("Record updated successfully into SqliteDb_developers table ", len(cursor.fetchall()))
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to insert data into sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def isUserLeader(user_id, team):
+    count = -1
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT * FROM team WHERE team_no = (?) AND leader_id = (?)"
+        val = (team, user_id)
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        count = len(value)
+        print(value)
+
+        cursor.close()
+
+
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return count != 0
+
+def delete_team(team):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_delete_query = f"DELETE from team WHERE team_no = (?)"
+        val = (team, )
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_delete_query, val)
+        sqliteConnection.commit()
+        updateTeamNumber(team)
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def get_specific_team_members(team):
+    value = []
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_select_query = "SELECT team_no, first_name, last_name, username, email, works_in.collaborator_id FROM user, works_in WHERE user.user_id = works_in.collaborator_id AND works_in.team_no = (?)"
+        val = (team, )
+        cursor.execute(sqlite_select_query, val)
+        sqliteConnection.commit()
+        value = cursor.fetchall()
+        print("Records selected successfully from feature table ", len(cursor.fetchall()))
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return value

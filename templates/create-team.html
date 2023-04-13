@@ -24,7 +24,18 @@
             <select name="leader-select" id="leader-select">
               <option value="Select a leader">Select a leader</option>
               {% for collab_id in con %}
-              <option value={{collab_id.0}} >{{collab_id.1}}</option>
+              <option value="{{collab_id.0}}">{{collab_id.1}}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+
+        <div class="inputContainer">
+          <label>
+            <select name="project-select" id="leader-select">
+              <option value="Select a leader">Select a project</option>
+              {% for project in projects %}
+              <option value="{{project.0}}">{{project.1}}</option>
               {% endfor %}
             </select>
           </label>
