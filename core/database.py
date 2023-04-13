@@ -184,6 +184,14 @@ def create_report(ticketNo, description, date):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
+        sqlite_insert_query = """INSERT INTO progress_report
+                                    (ticket_no) 
+                                    VALUES 
+                                    (?)"""
+        val = (ticketNo, )
+
+        count = cursor.execute(sqlite_insert_query, val)
+        
         sqlite_insert_query = """INSERT INTO progress_contents
                                     (ticket_no, description, progress_date) 
                                     VALUES 
@@ -1131,7 +1139,7 @@ def getReportPage():
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        sqlite_select_query = "SELECT ticket_no FROM ticket"
+        sqlite_select_query = "SELECT DISTINCT ticket_no FROM progress_report"
         cursor.execute(sqlite_select_query)
         sqliteConnection.commit()
         tickets = cursor.fetchall()
@@ -1139,17 +1147,15 @@ def getReportPage():
 
         
         for no in tickets:
-            tickets = []
-            tickets.append(no)
-            print(tickets)
+            temp = []
+            temp.append(no)
             sqlite_select_query = "SELECT progress_date, description FROM progress_contents WHERE ticket_no = ?"
             cursor.execute(sqlite_select_query,(no))
             sqliteConnection.commit()
             for row in cursor.fetchall():
-                element.append(row)
-            tickets.append(element)
-            value.append(element)
-            print(value)
+                temp.append(row)
+            value.append(temp)
+
         print("Record selected successfully from SqliteDb_developers table ", value)
 
         cursor.close()
@@ -1161,22 +1167,3 @@ def getReportPage():
             print("The SQLite connection is closed")
         return value
 
-def insert_progress_report(ticket_no):
-    try:
-        sqliteConnection = sqlite3.connect('db.sqlite3')
-        cursor = sqliteConnection.cursor()
-        print("Successfully Connected to SQLite")
-        cursor.execute("PRAGMA foreign_keys = ON;")
-        count = cursor.execute("INSERT INTO progress_report (ticket_no) VALUES (?)", (ticket_no,))
-        sqliteConnection.commit()
-        print("Record inserted successfully into User table ", count)
-        sqliteConnection.commit()
-        cursor.close()
-
-    except sqlite3.Error as error:
-        print("Failed to insert data into User table", error)
-    finally:
-        if sqliteConnection:
-            sqliteConnection.close()
-            print("The SQLite connection is closed")
-    
