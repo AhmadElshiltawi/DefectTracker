@@ -1283,3 +1283,36 @@ def get_specific_team_members(team):
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return value
+    
+
+def select_team_no(user_id):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT team_no FROM user, works_in WHERE user.user_id=? AND user.user_id = works_in.collaborator_id", (user_id,))
+        team_no = cursor.fetchall()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select last name from User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return team_no
+    
+def get_team_from_ticket(ticket):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT team_no FROM works_on WHERE ticket_no = (?)", (ticket,))
+        team_no = cursor.fetchall()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select last name from User table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return team_no

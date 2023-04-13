@@ -125,8 +125,13 @@ def signin(request):
     
 
 def assign_leader(request):
+    
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+         return redirect('teams')
+    
     if request.method == "POST":
         team = request.POST['team-select']
         if team == "Select a team":
@@ -142,8 +147,13 @@ def assign_leader(request):
     return render(request, 'assign-leader.html',con)
 
 def assign_user(request):
+    
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+         return redirect('teams')
+    
     if request.method == "POST":
         print(request.POST)
         team = request.POST['team-select']
@@ -164,6 +174,10 @@ def assign_user(request):
 def assign_team(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+        return redirect('projects')
+
     if request.method == "POST":
         team = request.POST['team-select']
         if team == "Select a team":
@@ -243,8 +257,12 @@ def features(request):
 
 
 def create_bug(request):
+    
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+        return redirect('bugs')
 
     if request.method == "POST":
         project = request.POST['project-select']
@@ -262,8 +280,12 @@ def create_bug(request):
     return render(request, 'create-bug.html',con)
 
 def create_feature(request):
+    
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+        return redirect('features')
     
     if request.method == "POST":
         project = request.POST['project-select']
@@ -283,6 +305,9 @@ def create_feature(request):
 def create_project(request):
     if not request.session.has_key('username'):
         return redirect('signin')
+
+    if request.session['admin'] != "True":
+        return redirect('projects')
     
     if request.method == "POST":
         name = request.POST['title']
@@ -322,6 +347,7 @@ def tickets(request):
         return redirect('signin')
 
     if request.method == "POST":
+        team_nos = database.select_team_no(request.session['user_id'])
         for i in range(1, len(tickets) + 1):
 
             if f"close-ticket-{i}" in request.POST:
@@ -330,12 +356,41 @@ def tickets(request):
             else:
 
                 if f"status-{i}" in request.POST and request.POST[f"status-{i}"] != '':
-                    database.update_ticket_status(int(request.POST[f"ticket-no-{i}"]), request.POST[f"status-{i}"])
+                    allowed_to_work_on = False
+
+                    for team_no in team_nos:
+                        if team_no[0] == database.get_team_from_ticket(int(request.POST[f"ticket-no-{i}"]))[0][0]:
+                            allowed_to_work_on = True
+                            break
+                    
+                    if request.session['admin'] == "True":
+                        allowed_to_work_on = True
+
+                    if allowed_to_work_on:
+                        database.update_ticket_status(int(request.POST[f"ticket-no-{i}"]), request.POST[f"status-{i}"])
+                    
+                    if allowed_to_work_on == False:
+                        messages.info(request, "You don't have the right to do that!")
 
                 if f"priority-{i}" in request.POST and request.POST[f"priority-{i}"] != '':
-                    database.update_ticket_priority(int(request.POST[f"ticket-no-{i}"]), request.POST[f"priority-{i}"])
+                    allowed_to_work_on = False
+
+                    for team_no in team_nos:
+                        if team_no[0] == database.get_team_from_ticket(int(request.POST[f"ticket-no-{i}"]))[0][0]:
+                            allowed_to_work_on = True
+                            break
+                    
+                    if request.session['admin'] == "True":
+                        allowed_to_work_on = True
+
+                    if allowed_to_work_on:
+                        database.update_ticket_priority(int(request.POST[f"ticket-no-{i}"]), request.POST[f"priority-{i}"])
+                    
+                                        
+                    if allowed_to_work_on == False:
+                        messages.info(request, "You don't have the right to do that!")
                 
-                if f"team-{i}" in request.POST and request.POST[f"team-{i}"] != '':
+                if f"team-{i}" in request.POST and request.POST[f"team-{i}"] != '' and request.session['admin'] == "True":
                     if database.check_if_team_not_exist(int(request.POST[f"team-{i}"])) is True:
                         messages.info(request, "Chosen team number does not exist!")
                         return redirect('tickets')
@@ -417,6 +472,13 @@ def logout(request):
 
 
 def create_team(request):
+
+    if not request.session.has_key('username'):
+        return redirect('signin')
+
+    if request.session['admin'] != "True":
+         return redirect('teams')
+
     if request.method == "POST":
         leader = request.POST['leader-select']
         project = request.POST['project-select']
