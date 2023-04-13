@@ -134,6 +134,7 @@
               <tbody>
                 {% for ticket in con %}
                 <tr>
+                  {% if request.session.admin == "True" %}
                   <td>
                     <button
                       type="submit"
@@ -144,6 +145,19 @@
                       CLOSE TICKET
                     </button>
                   </td>
+                  {% else %}
+                  <td>
+                    <button
+                      type="submit"
+                      form="table-form"
+                      value="{{ticket.0}}"
+                      name="close-ticket-{{forloop.counter}}"
+                      disabled
+                    >
+                      CLOSE TICKET
+                    </button>
+                  </td>
+                  {% endif %}
                   <td>
                     <label>
                       <input

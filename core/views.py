@@ -357,7 +357,31 @@ def projects(request):
     if not request.session.has_key('username'):
         return redirect('signin')
         
-    return render(request, 'projects.html')
+    projects = database.getProjectPage()
+    con = {"con":projects} 
+
+    if request.method == "POST":
+        print(request.POST)
+        for i in range(1, len(projects) + 1):
+
+            if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
+                print(i)
+                database.delete_project(int(request.POST[f"id-{i}"]))
+
+            else:
+                if f"title-{i}" in request.POST and request.POST[f"title-{i}"] != '':
+                    database.update_project_name(int(request.POST[f"id-{i}"]), request.POST[f"title-{i}"])
+
+                if f"status-{i}" in request.POST and request.POST[f"status-{i}"] != '':
+                    database.update_project_status(int(request.POST[f"id-{i}"]), request.POST[f"status-{i}"])
+
+                if f"description-{i}" in request.POST and request.POST[f"description-{i}"] != '':
+                    database.update_project_description(int(request.POST[f"id-{i}"]), request.POST[f"description-{i}"])
+
+        return redirect('projects')
+
+
+    return render(request, 'projects.html', con)
 
 def teams(request):
     data = database.getTeams()
