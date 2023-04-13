@@ -474,7 +474,7 @@ def updateLeader(team, user):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
-        # assignUser(team,user)
+        assignUser(team,user)
         sqlite_update_query = "UPDATE team SET leader_id = ? WHERE team_no = ?"
         val = (user, team)
         cursor.execute("PRAGMA foreign_keys = ON;")
