@@ -261,9 +261,6 @@ def create_bug(request):
     if not request.session.has_key('username'):
         return redirect('signin')
 
-    if request.session['admin'] != "True":
-        return redirect('bugs')
-
     if request.method == "POST":
         project = request.POST['project-select']
         if project == "Choose a project":
@@ -283,9 +280,6 @@ def create_feature(request):
     
     if not request.session.has_key('username'):
         return redirect('signin')
-
-    if request.session['admin'] != "True":
-        return redirect('features')
     
     if request.method == "POST":
         project = request.POST['project-select']
