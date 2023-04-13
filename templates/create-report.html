@@ -24,7 +24,7 @@
             <select name="ticket-select" id="ticket-select">
               <option value="Select a ticket">Select a ticket</option>
               {% for ticket in con %}
-              <option value={{ticket.0}} >{{ticket.0}}</option>
+              <option value="{{ticket.0}}">{{ticket.0}}</option>
               {% endfor %}
             </select>
           </label>
@@ -33,7 +33,7 @@
         <div class="inputContainerTextArea">
           <label>
             <textarea
-              name = "contents"
+              name="contents"
               class="textarea-input"
               rows="5"
               cols="100"

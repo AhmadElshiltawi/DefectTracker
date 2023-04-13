@@ -184,6 +184,14 @@ def create_report(ticketNo, description, date):
         sqliteConnection = sqlite3.connect('db.sqlite3')
         cursor = sqliteConnection.cursor()
         print("Successfully Connected to SQLite")
+        sqlite_insert_query = """INSERT OR IGNORE INTO progress_report
+                                    (ticket_no) 
+                                    VALUES 
+                                    (?)"""
+        val = (ticketNo, )
+
+        count = cursor.execute(sqlite_insert_query, val)
+
         sqlite_insert_query = """INSERT INTO progress_contents
                                     (ticket_no, description, progress_date) 
                                     VALUES 
@@ -1294,7 +1302,7 @@ def select_team_no(user_id):
         team_no = cursor.fetchall()
         cursor.close()
     except sqlite3.Error as error:
-        print("Failed to select last name from User table", error)
+        print("Failed to select team no from User table", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
@@ -1310,9 +1318,96 @@ def get_team_from_ticket(ticket):
         team_no = cursor.fetchall()
         cursor.close()
     except sqlite3.Error as error:
-        print("Failed to select last name from User table", error)
+        print("Failed to select last name from team table", error)
     finally:
         if sqliteConnection:
             sqliteConnection.close()
             print("The SQLite connection is closed")
         return team_no
+
+def insert_progress_report(ticket_no):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        count = cursor.execute("INSERT INTO progress_report (ticket_no) VALUES (?)", (ticket_no,))
+        sqliteConnection.commit()
+        print("Record inserted successfully into User table ", count)
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to insert data into report table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+
+def get_progress_reports():
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT ticket_no FROM progress_report")
+        tickets = cursor.fetchall()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select last name from report table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return tickets
+    
+def get_progress_contents():
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT ticket_no, description, progress_date FROM progress_contents")
+        tickets = cursor.fetchall()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select last name from contents table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return tickets
+    
+        
+def get_specific_progress_contents(ticket_no):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        cursor.execute("SELECT ticket_no, description, progress_date FROM progress_contents WHERE ticket_no = (?)", (ticket_no, ))
+        tickets = cursor.fetchall()
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Failed to select last name from contents table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")
+        return tickets
+    
+def delete_progress_contents(ticket_no, description, date):
+    try:
+        sqliteConnection = sqlite3.connect('db.sqlite3')
+        cursor = sqliteConnection.cursor()
+        print("Successfully Connected to SQLite")
+        sqlite_delete_query = f"DELETE from progress_contents WHERE ticket_no = (?) and description = (?) and progress_date = (?)"
+        val = (ticket_no, description, date)
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute(sqlite_delete_query, val)
+        sqliteConnection.commit()
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to delete data from sqlite table", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("The SQLite connection is closed")

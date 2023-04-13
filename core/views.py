@@ -130,7 +130,7 @@ def assign_leader(request):
         return redirect('signin')
 
     if request.session['admin'] != "True":
-         return redirect('teams')
+        return redirect('teams')
     
     if request.method == "POST":
         team = request.POST['team-select']
@@ -152,7 +152,7 @@ def assign_user(request):
         return redirect('signin')
 
     if request.session['admin'] != "True":
-         return redirect('teams')
+        return redirect('teams')
     
     if request.method == "POST":
         print(request.POST)
@@ -400,7 +400,10 @@ def reports(request):
     if not request.session.has_key('username'):
         return redirect('signin')
     
-    return render(request, 'reports.html')
+    reports = database.get_progress_reports()
+    con = {"con":reports, "con2" : database.get_progress_contents()} 
+    
+    return render(request, 'reports.html', con)
 
 def projects(request):
     if not request.session.has_key('username'):
@@ -414,7 +417,6 @@ def projects(request):
         for i in range(1, len(projects) + 1):
 
             if f"delete-request-{i}" in request.POST and request.POST[f"delete-request-{i}"] == 'on':
-                print(i)
                 database.delete_project(int(request.POST[f"id-{i}"]))
 
             else:
@@ -471,7 +473,7 @@ def create_team(request):
         return redirect('signin')
 
     if request.session['admin'] != "True":
-         return redirect('teams')
+        return redirect('teams')
 
     if request.method == "POST":
         leader = request.POST['leader-select']

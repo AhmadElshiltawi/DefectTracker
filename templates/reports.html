@@ -109,85 +109,41 @@
         {% for message in messages %}
         <div class="errorMessage">{{ message }}</div>
         {% endfor %}
+
         <div class="header">
           <h1>Reports</h1>
           <div class="buttons">
             <form action="{% url 'create-report' %}">
               <button>Write a report</button>
             </form>
-            <button>Save</button>
           </div>
         </div>
-        <div class="table-wrapper">
-          <table class="fl-table">
-            <thead>
-              <h3>Ticket: 1238434</h3>
-              <tr>
-                <th>Delete</th>
-                <th>Date</th>
-                <th style="width: 70vw">Contents</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">29/3/2024</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="table-wrapper">
-          <table class="fl-table">
-            <thead>
-              <h3>Ticket: 12432321</h3>
-              <tr>
-                <th>Delete</th>
-                <th>Date</th>
-                <th style="width: 70vw">Contents</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">29/3/2022</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <label class="switch">
-                    <input type="checkbox" />
-                  </label>
-                </td>
-                <td contenteditable="true">31/3/2022</td>
-                <td contenteditable="true">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Praesent auctor augue libero, nec posuere mi scelerisque et.
-                  Nam vitae turpis non erat maximus placerat. Aenean id eleifend
-                  leo,
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form action="" method="POST" id="table-form">
+          {% csrf_token %}
+          <div class="table-wrapper">
+            {% for ticket in con %}
+            <table class="fl-table">
+              <thead>
+                <h3>Ticket: {{ticket.0}}</h3>
+                <tr>
+                  <th>Date</th>
+                  <th>Contents</th>
+                </tr>
+              </thead>
+              {% for content in con2 %}
+              <tbody>
+                <tr>
+                  {% if content.0 == ticket.0 %}
+                  <td>{{content.2}}</td>
+                  <td>{{content.1}}</td>
+                  {% endif %}
+                </tr>
+              </tbody>
+              {% endfor %}
+            </table>
+            {% endfor %}
+          </div>
+        </form>
       </div>
     </div>
   </body>
