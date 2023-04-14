@@ -192,6 +192,7 @@
                     </label>
                   </td>
                   <td>{{ticket.6}}</td>
+                  {% if request.session.admin == "True" %}
                   <td>
                     <label>
                       <input
@@ -202,6 +203,9 @@
                       />
                     </label>
                   </td>
+                  {% else %}
+                  <td>{{ticket.7}}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
               </tbody>
